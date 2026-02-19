@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Đặt Tên Bé Theo Thần Số Học | Numerology Baby Name",
+  title: "Đặt Tên Bé Theo Thần Số Học & Ngũ Hành | Numerology Baby Name",
   description:
-    "Công cụ đặt tên cho bé dựa trên thần số học Pythagorean. Phân tích chỉ số đường đời, sứ mệnh, linh hồn, nhân cách. Gợi ý tên hợp mệnh.",
+    "Công cụ đặt tên cho bé dựa trên thần số học Pythagorean kết hợp Ngũ Hành. Phân tích 6 chỉ số: đường đời, sứ mệnh, linh hồn, nhân cách, trưởng thành, ngày sinh. Gợi ý tên hợp mệnh, so sánh tên, phân tích biệt danh.",
   keywords: [
     "thần số học",
     "đặt tên bé",
@@ -23,12 +23,32 @@ export const metadata: Metadata = {
     "numerology",
     "baby name",
     "tên hay cho bé",
+    "ngũ hành",
+    "phong thủy tên",
+    "đặt tên theo mệnh",
+    "thần số học 2026",
+    "tên bé trai",
+    "tên bé gái",
+    "pythagorean numerology",
   ],
   openGraph: {
-    title: "Đặt Tên Bé Theo Thần Số Học",
-    description: "Tìm tên hay, hợp mệnh cho bé yêu dựa trên thần số học Pythagorean",
+    title: "Đặt Tên Bé Theo Thần Số Học & Ngũ Hành",
+    description: "Tìm tên hay, hợp mệnh cho bé yêu dựa trên thần số học Pythagorean kết hợp Ngũ Hành. Phân tích đầy đủ 6 chỉ số, gợi ý tên, so sánh và chia sẻ.",
     type: "website",
     locale: "vi_VN",
+    siteName: "Baby Name Numerology",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Đặt Tên Bé Theo Thần Số Học & Ngũ Hành",
+    description: "Công cụ đặt tên bé dựa trên thần số học Pythagorean + Ngũ Hành",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  alternates: {
+    canonical: "/",
   },
 };
 
