@@ -115,25 +115,49 @@ export const VIETNAMESE_NAMES: VietnameseName[] = [
 ];
 
 // Tên đệm phổ biến
-export const MIDDLE_NAMES: { name: string; gender: "male" | "female" | "unisex" }[] = [
-  // Nam
+export const MIDDLE_NAMES: { name: string; gender: "male" | "female" }[] = [
+  // === Nam ===
   { name: "Văn", gender: "male" },
   { name: "Hữu", gender: "male" },
   { name: "Đức", gender: "male" },
   { name: "Công", gender: "male" },
   { name: "Quốc", gender: "male" },
-  { name: "Minh", gender: "unisex" },
-  { name: "Thanh", gender: "unisex" },
-  { name: "Xuân", gender: "unisex" },
-  // Nữ
+  { name: "Minh", gender: "male" },
+  { name: "Thanh", gender: "male" },
+  { name: "Xuân", gender: "male" },
+  { name: "Gia", gender: "male" },
+  { name: "Anh", gender: "male" },
+  { name: "Bảo", gender: "male" },
+  { name: "Trọng", gender: "male" },
+  { name: "Tiến", gender: "male" },
+  { name: "Đình", gender: "male" },
+  { name: "Nhật", gender: "male" },
+  { name: "Trung", gender: "male" },
+  { name: "Thành", gender: "male" },
+  { name: "Đại", gender: "male" },
+  { name: "Hoàng", gender: "male" },
+  { name: "Phúc", gender: "male" },
+  // === Nữ ===
   { name: "Thị", gender: "female" },
   { name: "Ngọc", gender: "female" },
-  { name: "Thanh", gender: "unisex" },
   { name: "Phương", gender: "female" },
-  { name: "Minh", gender: "unisex" },
   { name: "Thuỳ", gender: "female" },
   { name: "Hoài", gender: "female" },
-  { name: "Gia", gender: "unisex" },
+  { name: "Thanh", gender: "female" },
+  { name: "Minh", gender: "female" },
+  { name: "Xuân", gender: "female" },
+  { name: "Bích", gender: "female" },
+  { name: "Diệu", gender: "female" },
+  { name: "Hồng", gender: "female" },
+  { name: "Kim", gender: "female" },
+  { name: "Mỹ", gender: "female" },
+  { name: "Tường", gender: "female" },
+  { name: "Yên", gender: "female" },
+  { name: "Gia", gender: "female" },
+  { name: "Hải", gender: "female" },
+  { name: "Khánh", gender: "female" },
+  { name: "Thiên", gender: "female" },
+  { name: "Quỳnh", gender: "female" },
 ];
 
 // Họ phổ biến ở Việt Nam

@@ -85,7 +85,7 @@ function SuggestTab() {
   const [middleName, setMiddleName] = useState("");
   const [middleName2, setMiddleName2] = useState("");
   const [birthDate, setBirthDate] = useState("");
-  const [gender, setGender] = useState<"male" | "female" | "all">("all");
+  const [gender, setGender] = useState<"male" | "female" | "all">("male");
   const [results, setResults] = useState<NameSuggestion[]>([]);
   const [searched, setSearched] = useState(false);
 

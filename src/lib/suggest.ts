@@ -40,9 +40,9 @@ export function suggestNames(options: SuggestOptions): NameSuggestion[] {
 
   // Filter tên đệm theo giới tính
   const middles = middleName
-    ? [{ name: middleName, gender: "unisex" as const }]
+    ? [{ name: middleName, gender: "male" as const }]
     : MIDDLE_NAMES.filter(
-        (m) => gender === "all" || m.gender === gender || m.gender === "unisex"
+        (m) => gender === "all" || m.gender === gender
       );
 
   const suggestions: NameSuggestion[] = [];
