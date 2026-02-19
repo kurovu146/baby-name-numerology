@@ -54,12 +54,12 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-4 py-8">
+      <main className="max-w-4xl mx-auto px-4 py-8 flex-1">
         {tab === "suggest" ? <SuggestTab /> : <AnalyzeTab />}
       </main>
 
-      {/* Footer */}
-      <footer className="bg-[#15143e] text-white/60 py-8 px-4 mt-12">
+      {/* Footer — luôn ở bottom nhờ flex-1 trên main */}
+      <footer className="bg-[#15143e] text-white/60 py-8 px-4 mt-auto">
         <div className="max-w-4xl mx-auto text-center">
           <p className="text-xs leading-relaxed">
             Kết quả chỉ mang tính tham khảo dựa trên thần số học Pythagorean.
@@ -83,6 +83,7 @@ export default function Home() {
 function SuggestTab() {
   const [lastName, setLastName] = useState("");
   const [middleName, setMiddleName] = useState("");
+  const [middleName2, setMiddleName2] = useState("");
   const [birthDate, setBirthDate] = useState("");
   const [gender, setGender] = useState<"male" | "female" | "all">("all");
   const [results, setResults] = useState<NameSuggestion[]>([]);
@@ -104,6 +105,7 @@ function SuggestTab() {
       birthDate: formatted,
       gender,
       middleName: middleName.trim() || undefined,
+      middleName2: middleName2.trim() || undefined,
       limit: 30,
     });
     setResults(suggestions);
@@ -118,17 +120,18 @@ function SuggestTab() {
           <span className="w-1 h-6 bg-[#af3689] rounded-full"></span>
           Nhập thông tin
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Row 1: Họ + Đệm 1 + Đệm 2 */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <label className="block text-sm font-semibold text-[#555] mb-1.5">
-              Họ của bé <span className="text-red-500">*</span>
+              Họ <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               list="lastnames"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
-              placeholder="VD: Nguyễn"
+              placeholder="Nguyễn"
               className="input-field w-full"
             />
             <datalist id="lastnames">
@@ -140,17 +143,34 @@ function SuggestTab() {
 
           <div>
             <label className="block text-sm font-semibold text-[#555] mb-1.5">
-              Tên đệm
+              Tên đệm 1
             </label>
             <input
               type="text"
               value={middleName}
               onChange={(e) => setMiddleName(e.target.value)}
-              placeholder="VD: Văn, Thị, Ngọc..."
+              placeholder="Thị, Văn..."
               className="input-field w-full"
             />
           </div>
 
+          <div>
+            <label className="block text-sm font-semibold text-[#555] mb-1.5">
+              Tên đệm 2
+            </label>
+            <input
+              type="text"
+              value={middleName2}
+              onChange={(e) => setMiddleName2(e.target.value)}
+              placeholder="Ngọc, Minh..."
+              className="input-field w-full"
+            />
+            <p className="text-[10px] text-[#aaa] mt-1">Cho tên 4 từ (tuỳ chọn)</p>
+          </div>
+        </div>
+
+        {/* Row 2: Ngày sinh + Giới tính */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
           <div>
             <label className="block text-sm font-semibold text-[#555] mb-1.5">
               Ngày sinh dự kiến <span className="text-red-500">*</span>
@@ -337,7 +357,7 @@ function AnalyzeTab() {
               type="text"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
-              placeholder="VD: Nguyễn Văn An"
+              placeholder="VD: Nguyễn Thị Ngọc Mai"
               className="input-field w-full"
             />
           </div>

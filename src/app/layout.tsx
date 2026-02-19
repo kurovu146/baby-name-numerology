@@ -40,7 +40,7 @@ export default function RootLayout({
   return (
     <html lang="vi">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-[#f7f3fa]`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-[#f7f3fa] flex flex-col`}
       >
         {children}
       </body>

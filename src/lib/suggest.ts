@@ -25,13 +25,13 @@ interface SuggestOptions {
   lastName: string;
   birthDate: string;
   gender: "male" | "female" | "all";
-  middleName?: string;
+  middleName?: string;      // Tên đệm 1 (VD: Thị, Văn)
+  middleName2?: string;     // Tên đệm 2 (VD: Ngọc, Minh) — cho tên 4 từ
   limit?: number;
 }
 
 export function suggestNames(options: SuggestOptions): NameSuggestion[] {
-  const { lastName, birthDate, gender, middleName, limit = 20 } = options;
-  const lifePath = calcLifePath(birthDate);
+  const { lastName, birthDate, gender, middleName, middleName2, limit = 30 } = options;
 
   // Filter tên theo giới tính
   const names = VIETNAMESE_NAMES.filter(
@@ -49,12 +49,16 @@ export function suggestNames(options: SuggestOptions): NameSuggestion[] {
 
   for (const mid of middles) {
     for (const first of names) {
-      const fullName = `${lastName} ${mid.name} ${first.name}`;
+      // Ghép tên: lastName + middleName + [middleName2] + firstName
+      const middlePart = middleName2
+        ? `${mid.name} ${middleName2}`
+        : mid.name;
+      const fullName = `${lastName} ${middlePart} ${first.name}`;
       const analysis = analyzeFullName(fullName, birthDate);
 
       suggestions.push({
         firstName: first.name,
-        middleName: mid.name,
+        middleName: middlePart,
         fullName,
         meaning: first.meaning,
         analysis,
@@ -62,14 +66,9 @@ export function suggestNames(options: SuggestOptions): NameSuggestion[] {
     }
   }
 
-  // Sort theo compatibility score (cao → thấp), rồi theo expression match
+  // Sort theo compatibility score (cao → thấp)
   suggestions.sort((a, b) => {
-    // Primary: compatibility score
-    const scoreDiff = b.analysis.compatibility.score - a.analysis.compatibility.score;
-    if (scoreDiff !== 0) return scoreDiff;
-
-    // Secondary: expression number gần life path hơn (cùng nhóm)
-    return 0;
+    return b.analysis.compatibility.score - a.analysis.compatibility.score;
   });
 
   return suggestions.slice(0, limit);
