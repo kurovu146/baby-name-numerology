@@ -516,6 +516,104 @@ export const NUMBER_MEANINGS: Record<number, NumberMeaning> = {
   },
 };
 
+// ============================================================================
+// Phân tích biệt danh (Nickname)
+// ============================================================================
+
+export interface NicknameResult {
+  nickname: string;
+  normalizedNickname: string;
+  minorExpression: number;    // Tổng tất cả chữ cái biệt danh
+  minorSoulUrge: number;      // Chỉ nguyên âm trong biệt danh
+  minorPersonality: number;   // Chỉ phụ âm trong biệt danh
+  letterBreakdown: {
+    letter: string;
+    value: number;
+    type: "vowel" | "consonant";
+  }[];
+  // So sánh với tên khai sinh
+  comparison?: {
+    fullName: string;
+    expressionMatch: boolean;     // Minor Expression cùng nhóm với Expression?
+    soulUrgeMatch: boolean;       // Minor Soul Urge cùng nhóm với Soul Urge?
+    personalityMatch: boolean;    // Minor Personality cùng nhóm với Personality?
+    harmonyScore: number;         // 0-100
+    level: "excellent" | "good" | "neutral" | "challenging";
+    description: string;
+  };
+}
+
+/**
+ * Phân tích biệt danh.
+ * Nếu truyền fullName + birthDate sẽ so sánh với tên khai sinh.
+ */
+export function analyzeNickname(
+  nickname: string,
+  fullName?: string,
+  birthDate?: string,
+): NicknameResult {
+  const normalized = normalizeVietnamese(nickname);
+  const letters = classifyLetters(normalized);
+
+  const minorExpression = calcExpression(normalized);
+  const minorSoulUrge = calcSoulUrge(normalized);
+  const minorPersonality = calcPersonality(normalized);
+
+  const result: NicknameResult = {
+    nickname,
+    normalizedNickname: normalized,
+    minorExpression,
+    minorSoulUrge,
+    minorPersonality,
+    letterBreakdown: letters,
+  };
+
+  // So sánh với tên khai sinh nếu có
+  if (fullName && birthDate) {
+    const fullAnalysis = analyzeFullName(fullName, birthDate);
+
+    const expressionMatch = isSameHarmonyGroup(minorExpression, fullAnalysis.expression);
+    const soulUrgeMatch = isSameHarmonyGroup(minorSoulUrge, fullAnalysis.soulUrge);
+    const personalityMatch = isSameHarmonyGroup(minorPersonality, fullAnalysis.personality);
+
+    // Tính harmony score: 3 cặp so sánh với trọng số
+    const pairScores = [
+      { score: getPairScore(minorExpression, fullAnalysis.expression), weight: 0.40 },
+      { score: getPairScore(minorSoulUrge, fullAnalysis.soulUrge), weight: 0.35 },
+      { score: getPairScore(minorPersonality, fullAnalysis.personality), weight: 0.25 },
+    ];
+    let harmonyScore = Math.round(
+      pairScores.reduce((sum, p) => sum + p.score * p.weight, 0)
+    );
+
+    // Bonus nếu tất cả 3 cặp cùng nhóm
+    if (expressionMatch && soulUrgeMatch && personalityMatch) {
+      harmonyScore = Math.min(100, harmonyScore + 5);
+    }
+
+    const level = getCompatibilityLevel(harmonyScore);
+
+    const descriptions: Record<string, string> = {
+      excellent: "Biệt danh rất hài hòa với tên khai sinh! Năng lượng hàng ngày bổ trợ tuyệt vời cho bản chất bên trong.",
+      good: "Biệt danh hợp với tên khai sinh. Năng lượng tương đồng, hỗ trợ tốt cho sự phát triển.",
+      neutral: "Biệt danh ở mức trung bình so với tên khai sinh. Không xung đột nhưng chưa thật sự nổi bật.",
+      challenging: "Biệt danh có năng lượng khác biệt so với tên khai sinh. Có thể tạo sự mâu thuẫn nhẹ trong tính cách thể hiện.",
+    };
+
+    result.comparison = {
+      fullName,
+      expressionMatch,
+      soulUrgeMatch,
+      personalityMatch,
+      harmonyScore,
+      level,
+      description: descriptions[level] || descriptions.neutral,
+    };
+  }
+
+  return result;
+}
+
 export function getMeaning(n: number): NumberMeaning {
   return (
     NUMBER_MEANINGS[n] ||

@@ -41,6 +41,7 @@ export default function RootLayout({
     <html lang="vi">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-[#f7f3fa] flex flex-col`}
+        suppressHydrationWarning
       >
         {children}
       </body>
