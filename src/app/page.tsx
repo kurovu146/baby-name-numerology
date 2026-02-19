@@ -10,58 +10,69 @@ import {
 import { suggestNames, type NameSuggestion } from "@/lib/suggest";
 import { LAST_NAMES } from "@/lib/names";
 
-type Tab = "analyze" | "suggest";
+type Tab = "suggest" | "analyze";
 
 export default function Home() {
   const [tab, setTab] = useState<Tab>("suggest");
 
   return (
-    <main className="max-w-4xl mx-auto px-4 py-8">
-      {/* Header */}
-      <header className="text-center mb-8">
-        <h1 className="text-3xl md:text-4xl font-bold text-amber-900 mb-2">
-          Đặt Tên Bé Theo Thần Số Học
-        </h1>
-        <p className="text-amber-700/80 text-sm md:text-base">
-          Tìm tên hay, hợp mệnh cho bé yêu dựa trên Pythagorean Numerology
-        </p>
+    <>
+      {/* Hero Header */}
+      <header className="hero-gradient text-white py-10 px-4">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="text-3xl md:text-4xl font-bold mb-3 drop-shadow-md">
+            Đặt Tên Bé Theo Thần Số Học
+          </h1>
+          <p className="text-white/80 text-sm md:text-base max-w-xl mx-auto">
+            Tìm tên hay, hợp mệnh cho bé yêu dựa trên phương pháp Pythagorean
+            Numerology
+          </p>
+
+          {/* Tab Switcher */}
+          <div className="flex justify-center gap-3 mt-6">
+            <button
+              onClick={() => setTab("suggest")}
+              className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all uppercase tracking-wide ${
+                tab === "suggest"
+                  ? "bg-white text-[#af3689] shadow-lg"
+                  : "bg-white/20 text-white hover:bg-white/30 border border-white/30"
+              }`}
+            >
+              Gợi ý tên
+            </button>
+            <button
+              onClick={() => setTab("analyze")}
+              className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all uppercase tracking-wide ${
+                tab === "analyze"
+                  ? "bg-white text-[#af3689] shadow-lg"
+                  : "bg-white/20 text-white hover:bg-white/30 border border-white/30"
+              }`}
+            >
+              Phân tích tên
+            </button>
+          </div>
+        </div>
       </header>
 
-      {/* Tab Switcher */}
-      <div className="flex justify-center gap-2 mb-8">
-        <button
-          onClick={() => setTab("suggest")}
-          className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all ${
-            tab === "suggest"
-              ? "bg-amber-600 text-white shadow-md"
-              : "bg-white text-amber-700 border border-amber-200 hover:bg-amber-50"
-          }`}
-        >
-          Gợi ý tên
-        </button>
-        <button
-          onClick={() => setTab("analyze")}
-          className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all ${
-            tab === "analyze"
-              ? "bg-amber-600 text-white shadow-md"
-              : "bg-white text-amber-700 border border-amber-200 hover:bg-amber-50"
-          }`}
-        >
-          Phân tích tên
-        </button>
-      </div>
-
-      {tab === "suggest" ? <SuggestTab /> : <AnalyzeTab />}
+      <main className="max-w-4xl mx-auto px-4 py-8">
+        {tab === "suggest" ? <SuggestTab /> : <AnalyzeTab />}
+      </main>
 
       {/* Footer */}
-      <footer className="mt-16 pt-8 border-t border-amber-200/60 text-center">
-        <p className="text-xs text-amber-600/60">
-          Kết quả chỉ mang tính tham khảo dựa trên thần số học Pythagorean.
-          <br />
-          Việc đặt tên cho bé nên kết hợp nhiều yếu tố khác nhau.
-        </p>
+      <footer className="bg-[#15143e] text-white/60 py-8 px-4 mt-12">
+        <div className="max-w-4xl mx-auto text-center">
+          <p className="text-xs leading-relaxed">
+            Kết quả chỉ mang tính tham khảo dựa trên thần số học Pythagorean.
+            <br />
+            Việc đặt tên cho bé nên kết hợp nhiều yếu tố: ý nghĩa, phong thủy,
+            văn hóa gia đình.
+          </p>
+          <p className="text-[10px] text-white/30 mt-4">
+            &copy; 2026 Baby Name Numerology
+          </p>
+        </div>
       </footer>
-    </main>
+    </>
   );
 }
 
@@ -102,11 +113,15 @@ function SuggestTab() {
   return (
     <div>
       {/* Form */}
-      <div className="bg-white rounded-2xl shadow-sm border border-amber-100 p-6 mb-8">
+      <div className="result-card p-6 mb-8">
+        <h2 className="text-lg font-bold text-[#af3689] mb-4 flex items-center gap-2">
+          <span className="w-1 h-6 bg-[#af3689] rounded-full"></span>
+          Nhập thông tin
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-amber-800 mb-1">
-              Họ của bé *
+            <label className="block text-sm font-semibold text-[#555] mb-1.5">
+              Họ của bé <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
@@ -114,7 +129,7 @@ function SuggestTab() {
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
               placeholder="VD: Nguyễn"
-              className="w-full px-4 py-2.5 rounded-lg border border-amber-200 focus:ring-2 focus:ring-amber-400 focus:border-transparent outline-none text-gray-800"
+              className="input-field w-full"
             />
             <datalist id="lastnames">
               {LAST_NAMES.map((n) => (
@@ -124,32 +139,32 @@ function SuggestTab() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-amber-800 mb-1">
-              Tên đệm (tùy chọn)
+            <label className="block text-sm font-semibold text-[#555] mb-1.5">
+              Tên đệm
             </label>
             <input
               type="text"
               value={middleName}
               onChange={(e) => setMiddleName(e.target.value)}
               placeholder="VD: Văn, Thị, Ngọc..."
-              className="w-full px-4 py-2.5 rounded-lg border border-amber-200 focus:ring-2 focus:ring-amber-400 focus:border-transparent outline-none text-gray-800"
+              className="input-field w-full"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-amber-800 mb-1">
-              Ngày sinh dự kiến *
+            <label className="block text-sm font-semibold text-[#555] mb-1.5">
+              Ngày sinh dự kiến <span className="text-red-500">*</span>
             </label>
             <input
               type="date"
               value={birthDate}
               onChange={(e) => setBirthDate(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-lg border border-amber-200 focus:ring-2 focus:ring-amber-400 focus:border-transparent outline-none text-gray-800"
+              className="input-field w-full"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-amber-800 mb-1">
+            <label className="block text-sm font-semibold text-[#555] mb-1.5">
               Giới tính
             </label>
             <select
@@ -157,7 +172,7 @@ function SuggestTab() {
               onChange={(e) =>
                 setGender(e.target.value as "male" | "female" | "all")
               }
-              className="w-full px-4 py-2.5 rounded-lg border border-amber-200 focus:ring-2 focus:ring-amber-400 focus:border-transparent outline-none text-gray-800"
+              className="input-field w-full"
             >
               <option value="all">Tất cả</option>
               <option value="male">Nam</option>
@@ -167,21 +182,28 @@ function SuggestTab() {
         </div>
 
         {lifePath > 0 && (
-          <div className="mt-4 p-3 bg-amber-50 rounded-lg">
-            <p className="text-sm text-amber-800">
-              Số Đường đời (Life Path):{" "}
-              <span className="font-bold text-amber-900 text-lg">
+          <div className="mt-4 p-4 bg-gradient-to-r from-[#f3e7f9] to-[#fce4f0] rounded-lg border border-[#e0c5eb]">
+            <div className="flex items-center gap-3">
+              <span className="number-badge w-12 h-12 text-xl">
                 {lifePath}
-              </span>{" "}
-              — {getMeaning(lifePath).name}
-            </p>
+              </span>
+              <div>
+                <p className="text-sm font-bold text-[#af3689]">
+                  Số Đường Đời (Life Path)
+                </p>
+                <p className="text-xs text-[#555]">
+                  {getMeaning(lifePath).name} —{" "}
+                  {getMeaning(lifePath).keywords.join(", ")}
+                </p>
+              </div>
+            </div>
           </div>
         )}
 
         <button
           onClick={handleSearch}
           disabled={!lastName.trim() || !birthDate}
-          className="mt-4 w-full py-3 bg-amber-600 text-white rounded-lg font-medium hover:bg-amber-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+          className="btn-primary mt-5 w-full py-3.5 text-sm uppercase tracking-wider"
         >
           Tìm tên hợp mệnh
         </button>
@@ -190,11 +212,15 @@ function SuggestTab() {
       {/* Results */}
       {searched && (
         <div>
-          <h2 className="text-xl font-bold text-amber-900 mb-4">
-            Gợi ý tên ({results.length} kết quả)
+          <h2 className="text-xl font-bold text-[#555] mb-4 flex items-center gap-2">
+            <span className="w-1 h-6 bg-[#da8138] rounded-full"></span>
+            Gợi ý tên
+            <span className="text-sm font-normal text-[#999]">
+              ({results.length} kết quả)
+            </span>
           </h2>
           {results.length === 0 ? (
-            <p className="text-amber-600">
+            <p className="text-[#999]">
               Không tìm thấy kết quả. Hãy thử thay đổi tiêu chí.
             </p>
           ) : (
@@ -221,43 +247,49 @@ function SuggestionCard({
   const { analysis } = suggestion;
   const compat = analysis.compatibility;
 
-  const levelColors = {
-    excellent: "bg-green-100 text-green-800 border-green-200",
-    good: "bg-blue-100 text-blue-800 border-blue-200",
-    neutral: "bg-yellow-100 text-yellow-800 border-yellow-200",
-    challenging: "bg-red-100 text-red-800 border-red-200",
+  const levelConfig = {
+    excellent: { text: "text-[#54a404]", label: "Rất hợp" },
+    good: { text: "text-[#2196f3]", label: "Hợp" },
+    neutral: { text: "text-[#da8138]", label: "Trung bình" },
+    challenging: { text: "text-[#e60909]", label: "Thử thách" },
   };
 
-  const levelLabels = {
-    excellent: "Rất hợp",
-    good: "Hợp",
-    neutral: "Trung bình",
-    challenging: "Thử thách",
-  };
+  const cfg = levelConfig[compat.level];
+  const barColor =
+    compat.level === "excellent" ? "#54a404"
+    : compat.level === "good" ? "#2196f3"
+    : compat.level === "neutral" ? "#da8138"
+    : "#e60909";
 
   return (
-    <div className="bg-white rounded-xl border border-amber-100 shadow-sm overflow-hidden">
+    <div className="result-card overflow-hidden">
       <div
-        className="p-4 cursor-pointer hover:bg-amber-50/50 transition-colors"
+        className="p-4 cursor-pointer hover:bg-[#faf5fc] transition-colors"
         onClick={() => setExpanded(!expanded)}
       >
         <div className="flex items-center gap-3">
-          <span className="text-xs text-amber-400 font-mono w-6">
-            #{rank}
+          <span className="number-badge w-8 h-8 text-xs shrink-0">
+            {rank}
           </span>
-          <div className="flex-1">
-            <h3 className="font-semibold text-amber-900 text-lg">
+          <div className="flex-1 min-w-0">
+            <h3 className="font-bold text-[#333] text-base truncate">
               {suggestion.fullName}
             </h3>
-            <p className="text-sm text-amber-600/70">{suggestion.meaning}</p>
+            <p className="text-xs text-[#888] truncate">{suggestion.meaning}</p>
           </div>
-          <div className="flex items-center gap-2">
-            <span
-              className={`px-2.5 py-1 rounded-full text-xs font-medium border ${levelColors[compat.level]}`}
-            >
-              {levelLabels[compat.level]} ({compat.score}%)
-            </span>
-            <span className="text-amber-400 text-sm">
+          <div className="flex items-center gap-2 shrink-0">
+            <div className="text-right">
+              <span className={`text-xs font-bold ${cfg.text}`}>
+                {cfg.label}
+              </span>
+              <div className="compat-bar w-16 mt-1">
+                <div
+                  className="compat-bar-fill"
+                  style={{ width: `${compat.score}%`, background: barColor }}
+                />
+              </div>
+            </div>
+            <span className="text-[#bbb] text-xs">
               {expanded ? "▲" : "▼"}
             </span>
           </div>
@@ -265,7 +297,7 @@ function SuggestionCard({
       </div>
 
       {expanded && (
-        <div className="px-4 pb-4 border-t border-amber-50">
+        <div className="px-4 pb-4 border-t border-[#f0e8f5]">
           <AnalysisDetail result={analysis} />
         </div>
       )}
@@ -291,50 +323,60 @@ function AnalyzeTab() {
 
   return (
     <div>
-      <div className="bg-white rounded-2xl shadow-sm border border-amber-100 p-6 mb-8">
+      <div className="result-card p-6 mb-8">
+        <h2 className="text-lg font-bold text-[#af3689] mb-4 flex items-center gap-2">
+          <span className="w-1 h-6 bg-[#af3689] rounded-full"></span>
+          Phân tích họ tên
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-amber-800 mb-1">
-              Họ tên đầy đủ *
+            <label className="block text-sm font-semibold text-[#555] mb-1.5">
+              Họ tên đầy đủ <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               placeholder="VD: Nguyễn Văn An"
-              className="w-full px-4 py-2.5 rounded-lg border border-amber-200 focus:ring-2 focus:ring-amber-400 focus:border-transparent outline-none text-gray-800"
+              className="input-field w-full"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-amber-800 mb-1">
-              Ngày sinh *
+            <label className="block text-sm font-semibold text-[#555] mb-1.5">
+              Ngày sinh <span className="text-red-500">*</span>
             </label>
             <input
               type="date"
               value={birthDate}
               onChange={(e) => setBirthDate(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-lg border border-amber-200 focus:ring-2 focus:ring-amber-400 focus:border-transparent outline-none text-gray-800"
+              className="input-field w-full"
             />
           </div>
         </div>
         <button
           onClick={handleAnalyze}
           disabled={!fullName.trim() || !birthDate}
-          className="mt-4 w-full py-3 bg-amber-600 text-white rounded-lg font-medium hover:bg-amber-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+          className="btn-primary mt-5 w-full py-3.5 text-sm uppercase tracking-wider"
         >
-          Phân tích
+          Phân tích ngay
         </button>
       </div>
 
       {result && (
-        <div className="bg-white rounded-2xl shadow-sm border border-amber-100 p-6">
-          <h2 className="text-xl font-bold text-amber-900 mb-1">
-            {result.originalName}
-          </h2>
-          <p className="text-sm text-amber-600 mb-4">
-            Normalized: {result.normalizedName} | Ngày sinh:{" "}
-            {result.birthDate}
-          </p>
+        <div className="result-card p-6">
+          <div className="flex items-center gap-3 mb-4">
+            <span className="number-badge w-14 h-14 text-2xl">
+              {result.expression}
+            </span>
+            <div>
+              <h2 className="text-xl font-bold text-[#333]">
+                {result.originalName}
+              </h2>
+              <p className="text-xs text-[#999]">
+                {result.normalizedName} &bull; {result.birthDate}
+              </p>
+            </div>
+          </div>
           <AnalysisDetail result={result} showLetterBreakdown />
         </div>
       )}
@@ -354,112 +396,152 @@ function AnalysisDetail({
   showLetterBreakdown?: boolean;
 }) {
   const indices = [
-    { label: "Đường đời", value: result.lifePath, desc: "Từ ngày sinh" },
-    { label: "Sứ mệnh", value: result.expression, desc: "Từ họ tên" },
-    { label: "Linh hồn", value: result.soulUrge, desc: "Nguyên âm" },
-    { label: "Nhân cách", value: result.personality, desc: "Phụ âm" },
-    { label: "Trưởng thành", value: result.maturity, desc: "Tổng hợp" },
-    { label: "Ngày sinh", value: result.birthday, desc: "Ngày" },
+    { label: "Đường Đời", value: result.lifePath, sub: "Life Path", color: "#af3689" },
+    { label: "Sứ Mệnh", value: result.expression, sub: "Expression", color: "#8a2b6d" },
+    { label: "Linh Hồn", value: result.soulUrge, sub: "Soul Urge", color: "#da8138" },
+    { label: "Nhân Cách", value: result.personality, sub: "Personality", color: "#2196f3" },
+    { label: "Trưởng Thành", value: result.maturity, sub: "Maturity", color: "#54a404" },
+    { label: "Ngày Sinh", value: result.birthday, sub: "Birthday", color: "#9c27b0" },
   ];
 
+  const compatColor =
+    result.compatibility.level === "excellent" ? "#54a404"
+    : result.compatibility.level === "good" ? "#2196f3"
+    : result.compatibility.level === "neutral" ? "#da8138"
+    : "#e60909";
+
   return (
-    <div className="space-y-4 pt-4">
+    <div className="space-y-5 pt-3">
       {/* Compatibility */}
-      <div
-        className={`p-3 rounded-lg ${
-          result.compatibility.level === "excellent"
-            ? "bg-green-50"
-            : result.compatibility.level === "good"
-              ? "bg-blue-50"
-              : result.compatibility.level === "neutral"
-                ? "bg-yellow-50"
-                : "bg-red-50"
-        }`}
-      >
-        <p className="text-sm font-medium text-gray-800">
-          Tương hợp: {result.compatibility.score}%
-        </p>
-        <p className="text-xs text-gray-600 mt-1">
+      <div className="p-4 rounded-lg bg-gradient-to-r from-[#faf5fc] to-[#f5f0fa] border border-[#e8dff0]">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-sm font-bold text-[#555]">Mức tương hợp</span>
+          <span className="text-sm font-bold" style={{ color: compatColor }}>
+            {result.compatibility.score}%
+          </span>
+        </div>
+        <div className="compat-bar">
+          <div
+            className="compat-bar-fill"
+            style={{
+              width: `${result.compatibility.score}%`,
+              background: `linear-gradient(90deg, ${compatColor}, ${compatColor}cc)`,
+            }}
+          />
+        </div>
+        <p className="text-xs text-[#777] mt-2 leading-relaxed">
           {result.compatibility.description}
         </p>
       </div>
 
-      {/* Chỉ số */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+      {/* Chỉ số grid */}
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
         {indices.map((idx) => {
           const meaning = getMeaning(idx.value);
           return (
             <div
               key={idx.label}
-              className="p-3 bg-amber-50/50 rounded-lg border border-amber-100"
+              className="p-3 rounded-lg border border-[#e8dff0] bg-white hover:shadow-md transition-shadow"
             >
-              <div className="flex items-center gap-1.5 mb-1">
-                <span className="text-xs text-amber-600 font-medium">
-                  {idx.label}
-                </span>
-              </div>
-              <p className="text-2xl font-bold text-amber-900">{idx.value}</p>
-              <p className="text-xs text-amber-700/70 mt-0.5">
-                {meaning.name}
+              <p className="text-[10px] text-[#999] uppercase tracking-wider mb-1">
+                {idx.label}
               </p>
-              <p className="text-[10px] text-amber-500 mt-0.5">{idx.desc}</p>
+              <div className="flex items-center gap-2">
+                <span
+                  className="number-badge w-10 h-10 text-base"
+                  style={{
+                    background: `linear-gradient(135deg, ${idx.color}, ${idx.color}cc)`,
+                  }}
+                >
+                  {idx.value}
+                </span>
+                <div className="min-w-0">
+                  <p className="text-xs font-semibold text-[#333] truncate">
+                    {meaning.name}
+                  </p>
+                  <p className="text-[10px] text-[#aaa]">{idx.sub}</p>
+                </div>
+              </div>
             </div>
           );
         })}
       </div>
 
       {/* Ý nghĩa số sứ mệnh */}
-      <div className="p-4 bg-gradient-to-r from-amber-50 to-rose-50 rounded-lg">
-        <h4 className="font-medium text-amber-900 text-sm mb-2">
-          Số Sứ mệnh {result.expression} — {getMeaning(result.expression).name}
+      <div className="p-4 rounded-lg border-l-4 border-[#af3689] bg-gradient-to-r from-[#faf5fc] to-white">
+        <h4 className="font-bold text-[#af3689] text-sm mb-1">
+          Số Sứ Mệnh {result.expression} — {getMeaning(result.expression).name}
         </h4>
-        <p className="text-xs text-amber-700/80 leading-relaxed">
+        <p className="text-xs text-[#666] leading-relaxed mb-3">
           {getMeaning(result.expression).description}
         </p>
-        <div className="flex flex-wrap gap-1.5 mt-2">
-          {getMeaning(result.expression).keywords.map((kw) => (
-            <span
-              key={kw}
-              className="px-2 py-0.5 bg-white/80 rounded text-xs text-amber-700 border border-amber-200/60"
-            >
-              {kw}
-            </span>
-          ))}
+        <div className="space-y-2">
+          <div>
+            <p className="text-[10px] text-[#54a404] font-semibold mb-1">
+              Điểm mạnh
+            </p>
+            <div className="flex flex-wrap gap-1">
+              {getMeaning(result.expression).strengths.map((s) => (
+                <span
+                  key={s}
+                  className="px-2 py-0.5 bg-[#54a404]/10 text-[#54a404] text-[10px] rounded-full border border-[#54a404]/20"
+                >
+                  {s}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div>
+            <p className="text-[10px] text-[#e60909] font-semibold mb-1">
+              Thử thách
+            </p>
+            <div className="flex flex-wrap gap-1">
+              {getMeaning(result.expression).challenges.map((c) => (
+                <span
+                  key={c}
+                  className="px-2 py-0.5 bg-[#e60909]/10 text-[#e60909] text-[10px] rounded-full border border-[#e60909]/20"
+                >
+                  {c}
+                </span>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Letter Breakdown */}
       {showLetterBreakdown && result.letterBreakdown.length > 0 && (
         <div>
-          <h4 className="text-sm font-medium text-amber-800 mb-2">
+          <h4 className="text-sm font-bold text-[#555] mb-3 flex items-center gap-2">
+            <span className="w-1 h-5 bg-[#da8138] rounded-full"></span>
             Chi tiết quy đổi chữ cái
           </h4>
-          <div className="flex flex-wrap gap-1">
+          <div className="flex flex-wrap gap-1.5">
             {result.letterBreakdown.map((l, i) => (
               <div
                 key={i}
-                className={`w-10 h-14 rounded-lg flex flex-col items-center justify-center text-xs border ${
+                className={`w-11 h-16 rounded-lg flex flex-col items-center justify-center border-2 transition-transform hover:scale-110 ${
                   l.type === "vowel"
-                    ? "bg-rose-50 border-rose-200 text-rose-700"
-                    : "bg-sky-50 border-sky-200 text-sky-700"
+                    ? "bg-[#af3689]/5 border-[#af3689]/30 text-[#af3689]"
+                    : "bg-[#2196f3]/5 border-[#2196f3]/30 text-[#2196f3]"
                 }`}
               >
-                <span className="font-bold text-sm">{l.letter}</span>
-                <span className="text-[10px] opacity-70">{l.value}</span>
-                <span className="text-[8px] opacity-50">
-                  {l.type === "vowel" ? "V" : "C"}
+                <span className="font-bold text-base">{l.letter}</span>
+                <span className="text-xs opacity-70">{l.value}</span>
+                <span className="text-[8px] opacity-50 uppercase">
+                  {l.type === "vowel" ? "ngâm" : "phụ"}
                 </span>
               </div>
             ))}
           </div>
-          <div className="flex gap-4 mt-2 text-[10px] text-gray-500">
-            <span className="flex items-center gap-1">
-              <span className="w-2.5 h-2.5 rounded bg-rose-100 border border-rose-200"></span>
-              Nguyên âm (Soul Urge)
+          <div className="flex gap-4 mt-2 text-[10px] text-[#999]">
+            <span className="flex items-center gap-1.5">
+              <span className="w-3 h-3 rounded border-2 border-[#af3689]/30 bg-[#af3689]/5"></span>
+              Nguyên âm &rarr; Linh Hồn
             </span>
-            <span className="flex items-center gap-1">
-              <span className="w-2.5 h-2.5 rounded bg-sky-100 border border-sky-200"></span>
-              Phụ âm (Personality)
+            <span className="flex items-center gap-1.5">
+              <span className="w-3 h-3 rounded border-2 border-[#2196f3]/30 bg-[#2196f3]/5"></span>
+              Phụ âm &rarr; Nhân Cách
             </span>
           </div>
         </div>
