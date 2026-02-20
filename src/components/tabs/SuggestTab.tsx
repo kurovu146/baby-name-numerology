@@ -27,9 +27,9 @@ export default function SuggestTab() {
   const [excludeOpen, setExcludeOpen] = useState(false);
   const excludeRef = useRef<HTMLDivElement>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
+  const compareBarRef = useRef<HTMLDivElement>(null);
   const [results, setResults] = useState<NameSuggestion[]>([]);
   const [searched, setSearched] = useState(false);
-  const [showScrollTop, setShowScrollTop] = useState(false);
 
   // Filter & Sort state
   const [minScore, setMinScore] = useState(0);
@@ -69,17 +69,8 @@ export default function SuggestTab() {
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
-  // Show/hide scroll-to-top button
-  useEffect(() => {
-    function handleScroll() {
-      setShowScrollTop(window.scrollY > 400);
-    }
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const scrollToTop = useCallback(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  const scrollToCompareBar = useCallback(() => {
+    compareBarRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, []);
 
   const lifePath = useMemo(() => {
@@ -321,7 +312,7 @@ export default function SuggestTab() {
       {searched && (
         <div ref={resultsRef}>
           {/* Filter & Sort bar */}
-          <div className="result-card p-3 md:p-4 mb-4">
+          <div ref={compareBarRef} className="result-card p-3 md:p-4 mb-4">
             <div className="grid grid-cols-1 sm:grid-cols-3 md:flex md:flex-wrap items-center gap-2 md:gap-3">
               <div className="flex items-center gap-2">
                 <label className="text-xs font-semibold text-[#555] whitespace-nowrap w-24 sm:w-auto">Điểm tối thiểu:</label>
@@ -389,16 +380,17 @@ export default function SuggestTab() {
         </div>
       )}
 
-      {/* Scroll to top button */}
-      {showScrollTop && (
+      {/* Floating compare button — scroll lên filter bar */}
+      {compareList.length >= 2 && (
         <button
-          onClick={scrollToTop}
-          className="fixed bottom-6 right-6 w-10 h-10 bg-[#af3689] text-white rounded-full shadow-lg hover:bg-[#8a2b6d] transition-all flex items-center justify-center z-40"
-          title="Lên đầu trang"
+          onClick={scrollToCompareBar}
+          className="fixed bottom-6 right-6 px-4 py-2.5 bg-[#af3689] text-white rounded-full shadow-lg hover:bg-[#8a2b6d] transition-all flex items-center gap-2 z-40 text-xs font-bold"
+          title="Cuộn lên để so sánh"
         >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M18 15l-6-6-6 6" />
           </svg>
+          So sánh ({compareList.length})
         </button>
       )}
     </div>
