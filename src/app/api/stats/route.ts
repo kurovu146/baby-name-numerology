@@ -8,9 +8,11 @@ interface Stats {
   totalSearches: number;
 }
 
-function getGitHubHeaders() {
-  const token = process.env.GITHUB_TOKEN;
-  if (!token) throw new Error("GITHUB_TOKEN not set");
+function getGitHubToken(): string | null {
+  return process.env.GITHUB_TOKEN || null;
+}
+
+function getGitHubHeaders(token: string) {
   return {
     Authorization: `Bearer ${token}`,
     Accept: "application/vnd.github.v3+json",
@@ -18,17 +20,31 @@ function getGitHubHeaders() {
   };
 }
 
-// GET: fetch current stats
+async function fetchStats(token: string): Promise<{ stats: Stats; sha: string | undefined }> {
+  const fileUrl = `https://api.github.com/repos/${REPO}/contents/${FILE_PATH}?ref=${BRANCH}`;
+  const res = await fetch(fileUrl, {
+    headers: getGitHubHeaders(token),
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    return { stats: { totalSearches: 0 }, sha: undefined };
+  }
+
+  const data = await res.json();
+  const content = Buffer.from(data.content, "base64").toString("utf-8");
+  return { stats: JSON.parse(content), sha: data.sha };
+}
+
+// GET: fetch current stats via GitHub API (no cache)
 export async function GET() {
   try {
-    const url = `https://raw.githubusercontent.com/${REPO}/${BRANCH}/${FILE_PATH}`;
-    const res = await fetch(url, { next: { revalidate: 60 } });
-
-    if (!res.ok) {
+    const token = getGitHubToken();
+    if (!token) {
       return NextResponse.json({ totalSearches: 0 });
     }
 
-    const stats: Stats = await res.json();
+    const { stats } = await fetchStats(token);
     return NextResponse.json(stats);
   } catch {
     return NextResponse.json({ totalSearches: 0 });
@@ -38,20 +54,12 @@ export async function GET() {
 // POST: increment search counter
 export async function POST() {
   try {
-    const headers = getGitHubHeaders();
-    const fileUrl = `https://api.github.com/repos/${REPO}/contents/${FILE_PATH}?ref=${BRANCH}`;
-
-    // Get current file
-    const fileRes = await fetch(fileUrl, { headers });
-    let stats: Stats = { totalSearches: 0 };
-    let sha: string | undefined;
-
-    if (fileRes.ok) {
-      const fileData = await fileRes.json();
-      sha = fileData.sha;
-      const content = Buffer.from(fileData.content, "base64").toString("utf-8");
-      stats = JSON.parse(content);
+    const token = getGitHubToken();
+    if (!token) {
+      return NextResponse.json({ error: "GITHUB_TOKEN not set" }, { status: 500 });
     }
+
+    const { stats, sha } = await fetchStats(token);
 
     // Increment
     stats.totalSearches += 1;
@@ -61,9 +69,10 @@ export async function POST() {
       JSON.stringify(stats, null, 2) + "\n"
     ).toString("base64");
 
+    const fileUrl = `https://api.github.com/repos/${REPO}/contents/${FILE_PATH}?ref=${BRANCH}`;
     const updateRes = await fetch(fileUrl, {
       method: "PUT",
-      headers,
+      headers: getGitHubHeaders(token),
       body: JSON.stringify({
         message: `chore: update stats (${stats.totalSearches} searches)`,
         content: newContent,
@@ -73,8 +82,9 @@ export async function POST() {
     });
 
     if (!updateRes.ok) {
-      console.error("GitHub API error:", await updateRes.text());
-      return NextResponse.json({ error: "Failed to update" }, { status: 500 });
+      const err = await updateRes.text();
+      console.error("GitHub API error:", err);
+      return NextResponse.json({ error: "Failed to update", detail: err }, { status: 500 });
     }
 
     return NextResponse.json(stats);
