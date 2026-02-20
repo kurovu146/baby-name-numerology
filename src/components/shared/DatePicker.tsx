@@ -37,10 +37,13 @@ function ComboField({ value, placeholder, options, onSelect, min, max, flex }: C
   const [text, setText] = useState(value ? String(value) : "");
   const wrapRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const focusedRef = useRef(false);
 
-  // Sync text khi value thay đổi từ bên ngoài
+  // Sync text khi value thay đổi từ bên ngoài — CHỈ khi không đang focus
   useEffect(() => {
-    setText(value ? String(value) : "");
+    if (!focusedRef.current) {
+      setText(value ? String(value) : "");
+    }
   }, [value]);
 
   // Click outside → đóng dropdown
@@ -59,20 +62,25 @@ function ComboField({ value, placeholder, options, onSelect, min, max, flex }: C
     const n = parseInt(raw);
     if (!isNaN(n) && n >= min && n <= max) {
       onSelect(n);
+      setText(String(n));
     } else if (raw === "") {
       onSelect(0);
+      setText("");
+    } else {
+      // Invalid → revert display
+      setText(value ? String(value) : "");
     }
-    // Invalid → revert display
-    setText(value ? String(value) : "");
   }, [min, max, onSelect, value]);
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     const raw = e.target.value.replace(/\D/g, "");
-    setText(raw);
-    // Auto-commit khi đủ chữ số (2 cho ngày/tháng, 4 cho năm)
-    const digitCount = max >= 1000 ? 4 : 2;
-    if (raw.length >= digitCount) {
-      const n = parseInt(raw);
+    // Giới hạn độ dài input
+    const maxLen = max >= 1000 ? 4 : 2;
+    const trimmed = raw.slice(0, maxLen);
+    setText(trimmed);
+    // Auto-commit khi đủ chữ số
+    if (trimmed.length >= maxLen) {
+      const n = parseInt(trimmed);
       if (n >= min && n <= max) {
         onSelect(n);
         setOpen(false);
@@ -97,11 +105,14 @@ function ComboField({ value, placeholder, options, onSelect, min, max, flex }: C
   }
 
   function handleFocus() {
-    inputRef.current?.select();
+    focusedRef.current = true;
+    // Select all text để gõ đè nhanh
+    setTimeout(() => inputRef.current?.select(), 0);
     setOpen(true);
   }
 
   function handleBlur() {
+    focusedRef.current = false;
     // Delay nhẹ để click dropdown option kịp fire
     setTimeout(() => {
       if (wrapRef.current?.contains(document.activeElement)) return;
@@ -112,6 +123,7 @@ function ComboField({ value, placeholder, options, onSelect, min, max, flex }: C
 
   function handleOptionClick(v: number) {
     onSelect(v);
+    setText(String(v));
     setOpen(false);
   }
 
