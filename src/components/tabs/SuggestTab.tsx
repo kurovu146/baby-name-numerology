@@ -55,6 +55,7 @@ export default function SuggestTab() {
 
   const allNames = useMemo(() => {
     const set = new Set<string>();
+    LAST_NAMES.forEach((n) => set.add(n));
     VIETNAMESE_NAMES.forEach((n) => set.add(n.name));
     MIDDLE_NAMES.forEach((n) => set.add(n.name));
     customNames.forEach((n) => set.add(n));
