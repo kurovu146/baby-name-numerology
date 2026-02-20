@@ -74,6 +74,9 @@ export default function Home() {
 
       <footer className="bg-[#15143e] text-white/60 py-6 md:py-8 px-4 mt-auto">
         <div className="max-w-4xl mx-auto text-center">
+          <a href="/binh-ngo-2026" className="inline-block mb-4 px-4 py-2 rounded-full text-xs font-bold bg-white/10 text-white/80 hover:bg-white/20 transition-colors border border-white/20">
+            Đặt tên bé tuổi Bính Ngọ 2026
+          </a>
           <p className="text-xs leading-relaxed">
             Kết quả chỉ mang tính tham khảo dựa trên thần số học Pythagorean và Ngũ Hành.
             <br />
