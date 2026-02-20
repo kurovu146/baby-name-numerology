@@ -10,6 +10,7 @@ import {
 } from "@/lib/numerology";
 import { suggestNames, type NameSuggestion } from "@/lib/suggest";
 import { LAST_NAMES, VIETNAMESE_NAMES, MIDDLE_NAMES } from "@/lib/names";
+import { getCustomNames, addCustomName } from "@/lib/custom-names";
 import type { ParentInfo } from "@/constants/ui";
 import DatePicker from "@/components/shared/DatePicker";
 import ParentInputFields from "@/components/shared/ParentInputFields";
@@ -46,12 +47,19 @@ export default function SuggestTab() {
   const [withParents, setWithParents] = useState(false);
   const [parentInfo, setParentInfo] = useState<ParentInfo>({ dadName: "", dadBirth: "", momName: "", momBirth: "" });
 
+  const [customNames, setCustomNames] = useState<string[]>([]);
+
+  useEffect(() => {
+    setCustomNames(getCustomNames());
+  }, []);
+
   const allNames = useMemo(() => {
     const set = new Set<string>();
     VIETNAMESE_NAMES.forEach((n) => set.add(n.name));
     MIDDLE_NAMES.forEach((n) => set.add(n.name));
+    customNames.forEach((n) => set.add(n));
     return [...set].sort((a, b) => a.localeCompare(b, "vi"));
-  }, []);
+  }, [customNames]);
 
   const filteredExclude = useMemo(() => {
     if (!excludeInput.trim()) return [];
@@ -249,6 +257,10 @@ export default function SuggestTab() {
                   e.preventDefault();
                   const pick = filteredExclude.length > 0 ? filteredExclude[0] : excludeInput.trim();
                   if (!excludeList.includes(pick)) setExcludeList((prev) => [...prev, pick]);
+                  if (!allNames.includes(pick)) {
+                    addCustomName(pick);
+                    setCustomNames((prev) => [...prev, pick]);
+                  }
                   setExcludeInput(""); setExcludeOpen(false);
                 }
               }}
