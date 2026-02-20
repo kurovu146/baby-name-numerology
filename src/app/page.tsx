@@ -998,20 +998,20 @@ function NameTab() {
       <div className="flex gap-2 mb-5 md:mb-6">
         <button
           onClick={() => { setMode("suggest"); setQueryParams({ tab: "name", mode: "suggest" }); }}
-          className={`flex-1 px-3 md:px-4 py-2 rounded-lg text-sm font-bold transition-all ${
+          className={`px-5 py-2 rounded-full text-sm font-bold transition-all ${
             mode === "suggest"
-              ? "bg-[#af3689] text-white shadow"
-              : "bg-white text-[#af3689] border border-[#e8dff0] hover:bg-[#faf5fc]"
+              ? "bg-[#af3689] text-white shadow-md"
+              : "bg-white/80 text-[#af3689] border border-[#e0d4e8] hover:bg-[#faf5fc]"
           }`}
         >
           Gợi ý tên
         </button>
         <button
           onClick={() => { setMode("analyze"); setQueryParams({ tab: "name", mode: "analyze" }); }}
-          className={`flex-1 px-3 md:px-4 py-2 rounded-lg text-sm font-bold transition-all ${
+          className={`px-5 py-2 rounded-full text-sm font-bold transition-all ${
             mode === "analyze"
-              ? "bg-[#af3689] text-white shadow"
-              : "bg-white text-[#af3689] border border-[#e8dff0] hover:bg-[#faf5fc]"
+              ? "bg-[#af3689] text-white shadow-md"
+              : "bg-white/80 text-[#af3689] border border-[#e0d4e8] hover:bg-[#faf5fc]"
           }`}
         >
           Phân tích
@@ -1064,10 +1064,10 @@ function NicknameTab() {
   return (
     <div>
       <div className="flex gap-2 mb-5 md:mb-6">
-        <button onClick={() => setMode("suggest")} className={`flex-1 md:flex-none px-3 md:px-4 py-2 rounded-lg text-sm font-bold transition-all ${mode === "suggest" ? "bg-[#af3689] text-white shadow" : "bg-white text-[#af3689] border border-[#e8dff0] hover:bg-[#faf5fc]"}`}>
+        <button onClick={() => setMode("suggest")} className={`px-5 py-2 rounded-full text-sm font-bold transition-all ${mode === "suggest" ? "bg-[#af3689] text-white shadow-md" : "bg-white/80 text-[#af3689] border border-[#e0d4e8] hover:bg-[#faf5fc]"}`}>
           Gợi ý biệt danh
         </button>
-        <button onClick={() => setMode("analyze")} className={`flex-1 md:flex-none px-3 md:px-4 py-2 rounded-lg text-sm font-bold transition-all ${mode === "analyze" ? "bg-[#af3689] text-white shadow" : "bg-white text-[#af3689] border border-[#e8dff0] hover:bg-[#faf5fc]"}`}>
+        <button onClick={() => setMode("analyze")} className={`px-5 py-2 rounded-full text-sm font-bold transition-all ${mode === "analyze" ? "bg-[#af3689] text-white shadow-md" : "bg-white/80 text-[#af3689] border border-[#e0d4e8] hover:bg-[#faf5fc]"}`}>
           Phân tích biệt danh
         </button>
       </div>
