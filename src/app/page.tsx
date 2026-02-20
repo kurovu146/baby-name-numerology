@@ -994,7 +994,7 @@ function NameTab() {
   }, []);
 
   return (
-    <div className="w-full">
+    <>
       <div className="flex gap-2 mb-5 md:mb-6">
         <button
           onClick={() => { setMode("suggest"); setQueryParams({ tab: "name", mode: "suggest" }); }}
@@ -1017,10 +1017,8 @@ function NameTab() {
           Phân tích
         </button>
       </div>
-      <div className="w-full">
-        {mode === "suggest" ? <SuggestTab /> : <AnalyzeTab />}
-      </div>
-    </div>
+      {mode === "suggest" ? <SuggestTab /> : <AnalyzeTab />}
+    </>
   );
 }
 
