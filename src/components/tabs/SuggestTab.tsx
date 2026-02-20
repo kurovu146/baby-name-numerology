@@ -343,9 +343,14 @@ export default function SuggestTab() {
                 </select>
               </div>
               {compareList.length >= 2 && (
-                <button onClick={() => setShowCompare(true)} className="sm:col-span-3 md:col-auto md:ml-auto px-3 py-2 bg-[#af3689] text-white text-xs font-bold rounded-lg hover:bg-[#8a2b6d] transition-colors w-full sm:w-auto">
-                  So sánh ({compareList.length})
-                </button>
+                <div className="sm:col-span-3 md:col-auto md:ml-auto flex gap-2 w-full sm:w-auto">
+                  <button onClick={() => setCompareList([])} className="px-3 py-2 text-[#af3689] text-xs font-bold rounded-lg border border-[#e8dff0] hover:bg-[#faf5fc] transition-colors flex-1 sm:flex-none">
+                    Xóa chọn
+                  </button>
+                  <button onClick={() => setShowCompare(true)} className="px-3 py-2 bg-[#af3689] text-white text-xs font-bold rounded-lg hover:bg-[#8a2b6d] transition-colors flex-1 sm:flex-none">
+                    So sánh ({compareList.length})
+                  </button>
+                </div>
               )}
             </div>
           </div>
