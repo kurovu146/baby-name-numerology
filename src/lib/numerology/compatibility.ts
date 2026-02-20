@@ -7,20 +7,20 @@ const HARMONY_GROUPS: number[][] = [
   [3, 6, 9], // Sáng tạo, yêu thương, nhân đạo
 ];
 
-// Ma trận tương hợp chi tiết (1-9 x 1-9)
+// Ma trận tương hợp chi tiết (1-9 x 1-9), range 30-90
 const COMPATIBILITY_MATRIX: Record<string, number> = {
-  "1-1": 70, "1-2": 60, "1-3": 85, "1-4": 55, "1-5": 90, "1-6": 65,
-  "1-7": 80, "1-8": 75, "1-9": 80,
-  "2-2": 75, "2-3": 70, "2-4": 85, "2-5": 55, "2-6": 90, "2-7": 60,
-  "2-8": 80, "2-9": 75,
-  "3-3": 70, "3-4": 55, "3-5": 85, "3-6": 90, "3-7": 65, "3-8": 60,
-  "3-9": 90,
-  "4-4": 70, "4-5": 55, "4-6": 75, "4-7": 65, "4-8": 90, "4-9": 60,
-  "5-5": 65, "5-6": 55, "5-7": 85, "5-8": 60, "5-9": 80,
-  "6-6": 75, "6-7": 55, "6-8": 70, "6-9": 90,
-  "7-7": 65, "7-8": 55, "7-9": 75,
-  "8-8": 70, "8-9": 65,
-  "9-9": 75,
+  "1-1": 55, "1-2": 42, "1-3": 78, "1-4": 35, "1-5": 90, "1-6": 48,
+  "1-7": 72, "1-8": 65, "1-9": 70,
+  "2-2": 60, "2-3": 55, "2-4": 80, "2-5": 35, "2-6": 88, "2-7": 40,
+  "2-8": 72, "2-9": 62,
+  "3-3": 55, "3-4": 35, "3-5": 78, "3-6": 88, "3-7": 45, "3-8": 40,
+  "3-9": 88,
+  "4-4": 55, "4-5": 33, "4-6": 62, "4-7": 48, "4-8": 88, "4-9": 40,
+  "5-5": 48, "5-6": 33, "5-7": 80, "5-8": 38, "5-9": 72,
+  "6-6": 62, "6-7": 35, "6-8": 55, "6-9": 88,
+  "7-7": 48, "7-8": 30, "7-9": 62,
+  "8-8": 55, "8-9": 48,
+  "9-9": 62,
 };
 
 /** Tra điểm tương hợp giữa 2 số từ ma trận */
@@ -29,7 +29,7 @@ export function getPairScore(a: number, b: number): number {
   const baseB = MASTER_NUMBERS.has(b) ? reduceToSingleDigit(b) : b;
   const key =
     baseA <= baseB ? `${baseA}-${baseB}` : `${baseB}-${baseA}`;
-  const score = COMPATIBILITY_MATRIX[key] ?? 65;
+  const score = COMPATIBILITY_MATRIX[key] ?? 50;
 
   // Master Number bonus
   if (MASTER_NUMBERS.has(a) || MASTER_NUMBERS.has(b)) {
@@ -74,7 +74,7 @@ export function calcFullCompatibility(input: FullCompatibilityInput): number {
 
   // Bonus: Expression & Soul Urge cùng nhóm → nội ngoại thống nhất
   if (isSameHarmonyGroup(expression, soulUrge)) {
-    weightedScore += 3;
+    weightedScore += 2;
   }
 
   return Math.min(100, Math.round(weightedScore));
@@ -83,9 +83,9 @@ export function calcFullCompatibility(input: FullCompatibilityInput): number {
 export function getCompatibilityLevel(
   score: number
 ): "excellent" | "good" | "neutral" | "challenging" {
-  if (score >= 85) return "excellent";
-  if (score >= 70) return "good";
-  if (score >= 55) return "neutral";
+  if (score >= 82) return "excellent";
+  if (score >= 65) return "good";
+  if (score >= 45) return "neutral";
   return "challenging";
 }
 

@@ -67,19 +67,19 @@ export function numberToNguHanh(n: number): NguHanh {
 /** Đánh giá quan hệ ngũ hành giữa tên và năm sinh */
 export function calcNguHanhRelation(nameHanh: NguHanh, yearHanh: NguHanh): NguHanhRelation {
   if (nameHanh === yearHanh) {
-    return { relation: "bình_hòa", description: `${nameHanh} — ${yearHanh}: Bình hòa, đồng hành`, score: 5 };
+    return { relation: "bình_hòa", description: `${nameHanh} — ${yearHanh}: Bình hòa, đồng hành`, score: 3 };
   }
   if (TUONG_SINH[yearHanh] === nameHanh) {
-    return { relation: "được_sinh", description: `${yearHanh} sinh ${nameHanh}: Được sinh, thuận lợi phát triển`, score: 10 };
+    return { relation: "được_sinh", description: `${yearHanh} sinh ${nameHanh}: Được sinh, thuận lợi phát triển`, score: 5 };
   }
   if (TUONG_SINH[nameHanh] === yearHanh) {
-    return { relation: "tương_sinh", description: `${nameHanh} sinh ${yearHanh}: Tương sinh, hao tổn nhẹ nhưng tốt lành`, score: 3 };
+    return { relation: "tương_sinh", description: `${nameHanh} sinh ${yearHanh}: Tương sinh, hao tổn nhẹ nhưng tốt lành`, score: 2 };
   }
   if (TUONG_KHAC[yearHanh] === nameHanh) {
-    return { relation: "bị_khắc", description: `${yearHanh} khắc ${nameHanh}: Bị khắc, gặp trở ngại`, score: -8 };
+    return { relation: "bị_khắc", description: `${yearHanh} khắc ${nameHanh}: Bị khắc, gặp trở ngại`, score: -5 };
   }
   if (TUONG_KHAC[nameHanh] === yearHanh) {
-    return { relation: "tương_khắc", description: `${nameHanh} khắc ${yearHanh}: Tương khắc nhẹ, cần cân bằng`, score: -3 };
+    return { relation: "tương_khắc", description: `${nameHanh} khắc ${yearHanh}: Tương khắc nhẹ, cần cân bằng`, score: -2 };
   }
   return { relation: "bình_hòa", description: `${nameHanh} — ${yearHanh}: Bình hòa`, score: 0 };
 }

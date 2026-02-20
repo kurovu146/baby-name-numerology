@@ -39,7 +39,7 @@ export default function CompareModal({ names, onClose }: { names: NameSuggestion
                   {names.map((n) => {
                     const a = n.analysis;
                     let value: string | number = "";
-                    if (row.key === "score") value = `${a.compatibility.score}%`;
+                    if (row.key === "score") value = `${n.blendedScore?.finalScore ?? a.compatibility.score}%`;
                     else if (row.key === "nguHanh") value = a.nguHanh ? `${NGU_HANH_INFO[a.nguHanh.nameHanh].emoji} ${a.nguHanh.nameHanh}` : "—";
                     else value = (a as unknown as Record<string, number>)[row.key] ?? "—";
                     return <td key={n.fullName} className="text-center py-2 px-2 md:px-3 font-bold text-[#333] text-xs md:text-sm">{value}</td>;

@@ -10,8 +10,10 @@ import {
   calcPersonality,
   analyzeFullName,
   analyzeNickname,
+  calcParentCompatFromResults,
   type NumerologyResult,
   type NicknameResult,
+  type BlendedScore,
 } from "./numerology";
 import { VIETNAMESE_NAMES, MIDDLE_NAMES, NICKNAMES, type VietnameseName } from "./names";
 
@@ -21,6 +23,14 @@ export interface NameSuggestion {
   fullName: string;
   meaning: string;
   analysis: NumerologyResult;
+  blendedScore?: BlendedScore;
+}
+
+interface ParentInput {
+  dadName?: string;
+  dadBirth?: string; // YYYY-MM-DD
+  momName?: string;
+  momBirth?: string; // YYYY-MM-DD
 }
 
 interface SuggestOptions {
@@ -31,10 +41,21 @@ interface SuggestOptions {
   middleName2?: string;     // Tên đệm 2 (VD: Ngọc, Minh) — cho tên 4 từ
   excludeNames?: string[];  // Tên kiêng (gia phả) — loại tên chứa từ trùng
   limit?: number;
+  parentInfo?: ParentInput;
 }
 
+/** Convert YYYY-MM-DD → DD/MM/YYYY */
+function toNumerologyDate(yyyymmdd: string): string {
+  const [y, m, d] = yyyymmdd.split("-");
+  return `${d}/${m}/${y}`;
+}
+
+// Blend ratio: 70% name harmony + 30% parent harmony
+const NAME_WEIGHT = 0.70;
+const PARENT_WEIGHT = 0.30;
+
 export function suggestNames(options: SuggestOptions): NameSuggestion[] {
-  const { lastName, birthDate, gender, middleName, middleName2, excludeNames, limit = 30 } = options;
+  const { lastName, birthDate, gender, middleName, middleName2, excludeNames, limit = 30, parentInfo } = options;
 
   // Normalize danh sách tên kiêng để so sánh
   const excluded = (excludeNames ?? [])
@@ -52,6 +73,14 @@ export function suggestNames(options: SuggestOptions): NameSuggestion[] {
     : MIDDLE_NAMES.filter(
         (m) => gender === "all" || m.gender === gender
       );
+
+  // Pre-compute parent analysis (chỉ tính 1 lần, tái sử dụng cho mọi tên)
+  const dadAnalysis = (parentInfo?.dadName && parentInfo.dadBirth)
+    ? analyzeFullName(parentInfo.dadName.trim(), toNumerologyDate(parentInfo.dadBirth))
+    : null;
+  const momAnalysis = (parentInfo?.momName && parentInfo.momBirth)
+    ? analyzeFullName(parentInfo.momName.trim(), toNumerologyDate(parentInfo.momBirth))
+    : null;
 
   const suggestions: NameSuggestion[] = [];
 
@@ -71,19 +100,49 @@ export function suggestNames(options: SuggestOptions): NameSuggestion[] {
 
       const analysis = analyzeFullName(fullName, birthDate);
 
+      // Tính blended score khi có parent info
+      let blendedScore: BlendedScore | undefined;
+      if (dadAnalysis || momAnalysis) {
+        const dadScore = dadAnalysis
+          ? calcParentCompatFromResults(analysis, dadAnalysis, parentInfo!.dadName!, toNumerologyDate(parentInfo!.dadBirth!)).score
+          : null;
+        const momScore = momAnalysis
+          ? calcParentCompatFromResults(analysis, momAnalysis, parentInfo!.momName!, toNumerologyDate(parentInfo!.momBirth!)).score
+          : null;
+
+        const parentScores = [dadScore, momScore].filter((s): s is number => s !== null);
+        const avgParentScore = parentScores.reduce((a, b) => a + b, 0) / parentScores.length;
+        const finalScore = Math.round(
+          analysis.compatibility.score * NAME_WEIGHT + avgParentScore * PARENT_WEIGHT
+        );
+
+        blendedScore = {
+          finalScore,
+          nameScore: analysis.compatibility.score,
+          parentScore: Math.round(avgParentScore),
+          parentBreakdown: {
+            ...(dadScore !== null && { dadScore }),
+            ...(momScore !== null && { momScore }),
+          },
+        };
+      }
+
       suggestions.push({
         firstName: first.name,
         middleName: middlePart,
         fullName,
         meaning: first.meaning,
         analysis,
+        blendedScore,
       });
     }
   }
 
-  // Sort theo compatibility score (cao → thấp)
+  // Sort theo blended score (nếu có) hoặc compatibility score
   suggestions.sort((a, b) => {
-    return b.analysis.compatibility.score - a.analysis.compatibility.score;
+    const scoreA = a.blendedScore?.finalScore ?? a.analysis.compatibility.score;
+    const scoreB = b.blendedScore?.finalScore ?? b.analysis.compatibility.score;
+    return scoreB - scoreA;
   });
 
   return suggestions.slice(0, limit);

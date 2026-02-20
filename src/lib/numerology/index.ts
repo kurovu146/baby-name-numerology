@@ -5,6 +5,7 @@ export type {
   NguHanhRelation,
   NumerologyResult,
   ParentCompatibilityResult,
+  BlendedScore,
   NumberMeaning,
   NicknameResult,
 } from "./types";
@@ -23,7 +24,7 @@ export {
 } from "./indices";
 
 // Compatibility
-export { getPairScore, isSameHarmonyGroup, calcFullCompatibility } from "./compatibility";
+export { getPairScore, isSameHarmonyGroup, calcFullCompatibility, getCompatibilityLevel } from "./compatibility";
 
 // Ngũ Hành
 export { calcCanChi, numberToNguHanh, calcNguHanhRelation, NGU_HANH_INFO } from "./ngu-hanh";
@@ -35,7 +36,7 @@ export { NUMBER_MEANINGS, getMeaning } from "./meanings";
 export { analyzeFullName } from "./analyze";
 
 // Parent compatibility
-export { calcParentChildCompatibility } from "./parent-compat";
+export { calcParentChildCompatibility, calcParentCompatFromResults } from "./parent-compat";
 
 // Nickname
 export { analyzeNickname } from "./nickname";

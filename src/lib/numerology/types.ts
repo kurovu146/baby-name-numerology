@@ -66,6 +66,20 @@ export interface ParentCompatibilityResult {
   }[];
 }
 
+export interface BlendedScore {
+  /** Score tổng hợp dùng để rank (0-100) */
+  finalScore: number;
+  /** Điểm hài hòa tên — compatibility score gốc */
+  nameScore: number;
+  /** Trung bình điểm hợp mệnh bố/mẹ, null nếu không có parent */
+  parentScore: number | null;
+  /** Chi tiết điểm từng parent */
+  parentBreakdown?: {
+    dadScore?: number;
+    momScore?: number;
+  };
+}
+
 export interface NumberMeaning {
   number: number;
   name: string;

@@ -92,6 +92,12 @@ export default function SuggestTab() {
       middleName2: middleName2.trim() || undefined,
       excludeNames: excludeList.length > 0 ? excludeList : undefined,
       limit: 50,
+      parentInfo: withParents ? {
+        dadName: parentInfo.dadName.trim() || undefined,
+        dadBirth: parentInfo.dadBirth || undefined,
+        momName: parentInfo.momName.trim() || undefined,
+        momBirth: parentInfo.momBirth || undefined,
+      } : undefined,
     });
     setResults(suggestions);
     setSearched(true);
@@ -101,7 +107,10 @@ export default function SuggestTab() {
 
   // Filtered & sorted results
   const displayResults = useMemo(() => {
-    let filtered = results.filter((s) => s.analysis.compatibility.score >= minScore);
+    let filtered = results.filter((s) => {
+      const score = s.blendedScore?.finalScore ?? s.analysis.compatibility.score;
+      return score >= minScore;
+    });
     if (filterHanh !== "all") {
       filtered = filtered.filter((s) => {
         const nh = s.analysis.nguHanh;
@@ -112,7 +121,11 @@ export default function SuggestTab() {
     switch (sortBy) {
       case "name": sorted.sort((a, b) => a.fullName.localeCompare(b.fullName, "vi")); break;
       case "expression": sorted.sort((a, b) => a.analysis.expression - b.analysis.expression); break;
-      default: sorted.sort((a, b) => b.analysis.compatibility.score - a.analysis.compatibility.score);
+      default: sorted.sort((a, b) => {
+        const scoreA = a.blendedScore?.finalScore ?? a.analysis.compatibility.score;
+        const scoreB = b.blendedScore?.finalScore ?? b.analysis.compatibility.score;
+        return scoreB - scoreA;
+      });
     }
     return sorted;
   }, [results, minScore, sortBy, filterHanh]);
@@ -295,9 +308,9 @@ export default function SuggestTab() {
                 <label className="text-xs font-semibold text-[#555] whitespace-nowrap w-24 sm:w-auto">Điểm tối thiểu:</label>
                 <select value={minScore} onChange={(e) => setMinScore(Number(e.target.value))} className="input-field text-xs py-1 px-2 flex-1">
                   <option value={0}>Tất cả</option>
-                  <option value={55}>&ge; 55</option>
-                  <option value={70}>&ge; 70</option>
-                  <option value={85}>&ge; 85</option>
+                  <option value={45}>&ge; 45</option>
+                  <option value={65}>&ge; 65</option>
+                  <option value={82}>&ge; 82</option>
                 </select>
               </div>
               <div className="flex items-center gap-2">
