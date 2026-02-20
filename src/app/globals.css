@@ -79,32 +79,79 @@ body {
   color: #aaa;
 }
 
-/* Custom DatePicker — 3 select dropdowns */
-.date-select {
+/* Custom DatePicker — hybrid input + dropdown */
+.date-combo {
+  position: relative;
+  min-width: 0;
+}
+.date-combo-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.date-combo-input {
   background: #fff;
   border: 2px solid #e0d4e8;
   border-radius: 8px;
-  padding: 11px 24px 11px 10px;
+  padding: 11px 28px 11px 10px;
   font-size: 0.85rem;
   color: var(--text-main);
   transition: border-color 0.2s ease;
   box-sizing: border-box;
-  appearance: none;
-  -webkit-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23af3689' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 8px center;
-  cursor: pointer;
   min-width: 0;
   width: 100%;
 }
-.date-select:focus {
+.date-combo-input:focus {
   border-color: var(--primary);
   outline: none;
   box-shadow: 0 0 0 3px rgba(175, 54, 137, 0.15);
 }
-.date-select.placeholder {
+.date-combo-input.placeholder {
   color: #aaa;
+}
+.date-combo-chevron {
+  position: absolute;
+  right: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 8px 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.date-combo-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 2px solid #e0d4e8;
+  border-radius: 8px;
+  max-height: 180px;
+  overflow-y: auto;
+  z-index: 50;
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+.date-combo-option {
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  color: var(--text-main);
+  transition: background 0.15s;
+}
+.date-combo-option:hover {
+  background: rgba(175, 54, 137, 0.08);
+}
+.date-combo-option.selected {
+  background: rgba(175, 54, 137, 0.12);
+  color: var(--primary);
+  font-weight: 600;
 }
 
 /* Number badge */
