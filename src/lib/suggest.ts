@@ -15,7 +15,7 @@ import {
   type NicknameResult,
   type BlendedScore,
 } from "./numerology";
-import { VIETNAMESE_NAMES, MIDDLE_NAMES, NICKNAMES, type VietnameseName } from "./names";
+import { SUGGEST_NAMES, MIDDLE_NAMES, NICKNAMES, type VietnameseName } from "./names";
 
 export interface NameSuggestion {
   firstName: string;
@@ -63,7 +63,7 @@ export function suggestNames(options: SuggestOptions): NameSuggestion[] {
     .filter((n) => n.length > 0);
 
   // Filter tên theo giới tính
-  const names = VIETNAMESE_NAMES.filter(
+  const names = SUGGEST_NAMES.filter(
     (n) => gender === "all" || n.gender === gender || n.gender === "unisex"
   );
 
