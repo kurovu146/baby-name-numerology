@@ -120,11 +120,16 @@ function getDaysInMonth(month: number, year: number): number {
 }
 
 function DatePicker({ value, onChange, yearRange, className }: DatePickerProps) {
-  const parts = value ? value.split("-") : ["", "", ""];
-  const year = parseInt(parts[0]) || 0;
-  const month = parseInt(parts[1]) || 0;
-  const day = parseInt(parts[2]) || 0;
+  // Internal state để giữ từng phần khi chưa chọn đủ 3
+  const parseValue = (v: string) => {
+    const parts = v ? v.split("-") : [];
+    return { year: parseInt(parts[0]) || 0, month: parseInt(parts[1]) || 0, day: parseInt(parts[2]) || 0 };
+  };
+  const [internal, setInternal] = useState(() => parseValue(value));
 
+  useEffect(() => { setInternal(parseValue(value)); }, [value]);
+
+  const { day, month, year } = internal;
   const minYear = yearRange?.min ?? 2020;
   const maxYear = yearRange?.max ?? 2030;
   const daysInMonth = getDaysInMonth(month, year);
@@ -138,11 +143,16 @@ function DatePicker({ value, onChange, yearRange, className }: DatePickerProps) 
   ];
   const years = Array.from({ length: maxYear - minYear + 1 }, (_, i) => minYear + i);
 
-  function emit(d: number, m: number, y: number) {
-    if (!d || !m || !y) { onChange(""); return; }
-    const maxD = getDaysInMonth(m, y);
-    const clampedD = d > maxD ? maxD : d;
-    onChange(`${y}-${String(m).padStart(2, "0")}-${String(clampedD).padStart(2, "0")}`);
+  function handleChange(newDay: number, newMonth: number, newYear: number) {
+    const maxD = getDaysInMonth(newMonth, newYear);
+    const clampedDay = newDay > maxD ? maxD : newDay;
+    const next = { day: clampedDay, month: newMonth, year: newYear };
+    setInternal(next);
+    if (clampedDay && newMonth && newYear) {
+      onChange(`${newYear}-${String(newMonth).padStart(2, "0")}-${String(clampedDay).padStart(2, "0")}`);
+    } else {
+      onChange("");
+    }
   }
 
   return (
@@ -150,7 +160,7 @@ function DatePicker({ value, onChange, yearRange, className }: DatePickerProps) 
       {/* Ngày */}
       <select
         value={day || ""}
-        onChange={(e) => emit(Number(e.target.value), month, year)}
+        onChange={(e) => handleChange(Number(e.target.value), month, year)}
         className={`date-select flex-[0.8]${!day ? " placeholder" : ""}`}
       >
         <option value="" disabled>Ngày</option>
@@ -159,7 +169,7 @@ function DatePicker({ value, onChange, yearRange, className }: DatePickerProps) 
       {/* Tháng */}
       <select
         value={month || ""}
-        onChange={(e) => emit(day, Number(e.target.value), year)}
+        onChange={(e) => handleChange(day, Number(e.target.value), year)}
         className={`date-select flex-[1.3]${!month ? " placeholder" : ""}`}
       >
         <option value="" disabled>Tháng</option>
@@ -168,7 +178,7 @@ function DatePicker({ value, onChange, yearRange, className }: DatePickerProps) 
       {/* Năm */}
       <select
         value={year || ""}
-        onChange={(e) => emit(day, month, Number(e.target.value))}
+        onChange={(e) => handleChange(day, month, Number(e.target.value))}
         className={`date-select flex-[1.1]${!year ? " placeholder" : ""}`}
       >
         <option value="" disabled>Năm</option>
