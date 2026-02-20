@@ -4,6 +4,7 @@ import { useState, useMemo, useRef, useEffect, useCallback } from "react";
 import {
   analyzeNickname as analyzeNicknameFunc,
   analyzeFullName,
+  calcParentChildCompatibility,
   calcLifePath,
   calcCanChi,
   numberToNguHanh,
@@ -11,6 +12,7 @@ import {
   NGU_HANH_INFO,
   type NumerologyResult,
   type NicknameResult,
+  type ParentCompatibilityResult,
   type NguHanh,
 } from "@/lib/numerology";
 import { suggestNames, suggestNicknames, type NameSuggestion, type NicknameSuggestion } from "@/lib/suggest";
@@ -575,6 +577,7 @@ function SuggestionCard({
         <div className="px-3 md:px-4 pb-4 border-t border-[#f0e8f5]">
           <AnalysisDetail result={analysis} showNguHanh />
           <ShareButton name={suggestion.fullName} birthDate={analysis.birthDate} />
+          <ParentCompatibilitySection babyResult={analysis} />
         </div>
       )}
     </div>
@@ -711,6 +714,7 @@ function AnalyzeTab() {
           </div>
           <AnalysisDetail result={result} showLetterBreakdown showNguHanh />
           <ShareButton name={result.originalName} birthDate={birthDate} />
+          <ParentCompatibilitySection babyResult={result} />
         </div>
       )}
     </div>
@@ -1092,6 +1096,183 @@ function ShareButton({ name, birthDate }: { name: string; birthDate: string }) {
     <button onClick={handleCopy} className="w-full mt-4 py-2.5 px-4 rounded-lg border border-[#e8dff0] bg-white hover:bg-[#faf5fc] transition-colors text-sm text-[#af3689] font-medium flex items-center justify-center gap-2">
       {copied ? "Đã copy link!" : "Chia sẻ kết quả"}
     </button>
+  );
+}
+
+// ============================================================================
+// Component: Hợp mệnh với bố/mẹ
+// ============================================================================
+
+interface ParentEntry {
+  role: "Bố" | "Mẹ";
+  name: string;
+  birthDate: string; // YYYY-MM-DD
+  result: ParentCompatibilityResult | null;
+}
+
+const LEVEL_COLORS: Record<string, string> = {
+  excellent: "#54a404",
+  good: "#2196f3",
+  neutral: "#da8138",
+  challenging: "#e60909",
+};
+
+const LEVEL_LABELS: Record<string, string> = {
+  excellent: "Xuất sắc",
+  good: "Tốt",
+  neutral: "Trung bình",
+  challenging: "Thử thách",
+};
+
+function ParentCompatibilitySection({ babyResult }: { babyResult: NumerologyResult }) {
+  const [open, setOpen] = useState(false);
+  const [entries, setEntries] = useState<ParentEntry[]>([
+    { role: "Bố", name: "", birthDate: "", result: null },
+    { role: "Mẹ", name: "", birthDate: "", result: null },
+  ]);
+
+  function handleChange(idx: number, field: "name" | "birthDate", value: string) {
+    setEntries((prev) => {
+      const next = [...prev];
+      next[idx] = { ...next[idx], [field]: value, result: null };
+      return next;
+    });
+  }
+
+  function handleCalc(idx: number) {
+    const entry = entries[idx];
+    if (!entry.name.trim() || !entry.birthDate) return;
+    const [y, m, d] = entry.birthDate.split("-");
+    const formatted = `${d}/${m}/${y}`;
+    const result = calcParentChildCompatibility(babyResult, entry.name.trim(), formatted);
+    setEntries((prev) => {
+      const next = [...prev];
+      next[idx] = { ...next[idx], result };
+      return next;
+    });
+  }
+
+  return (
+    <div className="mt-5 border border-[#e8dff0] rounded-xl overflow-hidden">
+      <button
+        onClick={() => setOpen(!open)}
+        className="w-full flex items-center justify-between p-3 md:p-4 bg-gradient-to-r from-[#faf5fc] to-[#f5f0fa] hover:from-[#f5eefa] hover:to-[#f0eaf7] transition-colors"
+      >
+        <span className="text-sm font-bold text-[#af3689] flex items-center gap-2">
+          <span className="w-1 h-5 bg-[#af3689] rounded-full"></span>
+          Hợp mệnh với bố/mẹ
+        </span>
+        <span className="text-[#af3689] text-xs">{open ? "▲ Thu gọn" : "▼ Mở rộng"}</span>
+      </button>
+
+      {open && (
+        <div className="p-3 md:p-4 space-y-4">
+          <p className="text-xs text-[#888] leading-relaxed">
+            Nhập tên và ngày sinh của bố/mẹ để xem mức độ tương hợp với tên bé theo thần số học.
+          </p>
+
+          {entries.map((entry, idx) => (
+            <div key={entry.role} className="border border-[#e8dff0] rounded-lg p-3 md:p-4 space-y-3">
+              <h4 className="text-sm font-bold text-[#555] flex items-center gap-2">
+                <span className="w-5 h-5 rounded-full bg-[#af3689] text-white text-[10px] flex items-center justify-center font-bold shrink-0">
+                  {entry.role[0]}
+                </span>
+                {entry.role}
+              </h4>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold text-[#555] mb-1">
+                    Họ và tên {entry.role}
+                  </label>
+                  <input
+                    type="text"
+                    value={entry.name}
+                    onChange={(e) => handleChange(idx, "name", e.target.value)}
+                    placeholder={entry.role === "Bố" ? "Nguyễn Văn Hùng" : "Trần Thị Mai"}
+                    className="input-field w-full"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-[#555] mb-1">
+                    Ngày sinh {entry.role}
+                  </label>
+                  <input
+                    type="date"
+                    value={entry.birthDate}
+                    onChange={(e) => handleChange(idx, "birthDate", e.target.value)}
+                    className="input-field w-full"
+                  />
+                </div>
+              </div>
+
+              <button
+                onClick={() => handleCalc(idx)}
+                disabled={!entry.name.trim() || !entry.birthDate}
+                className="btn-primary w-full py-2 text-xs uppercase tracking-wider"
+              >
+                Tính tương hợp với {entry.role}
+              </button>
+
+              {entry.result && (
+                <div className="space-y-3">
+                  {/* Score bar */}
+                  <div className="p-3 rounded-lg bg-gradient-to-r from-[#faf5fc] to-[#f5f0fa] border border-[#e8dff0]">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-bold text-[#555]">
+                        Tương hợp con — {entry.role}
+                      </span>
+                      <span className="text-xs font-bold" style={{ color: LEVEL_COLORS[entry.result.level] }}>
+                        {entry.result.score}% — {LEVEL_LABELS[entry.result.level]}
+                      </span>
+                    </div>
+                    <div className="compat-bar">
+                      <div
+                        className="compat-bar-fill"
+                        style={{
+                          width: `${entry.result.score}%`,
+                          background: `linear-gradient(90deg, ${LEVEL_COLORS[entry.result.level]}, ${LEVEL_COLORS[entry.result.level]}cc)`,
+                        }}
+                      />
+                    </div>
+                    <p className="text-xs text-[#777] mt-2 leading-relaxed">
+                      {entry.result.description}
+                    </p>
+                  </div>
+
+                  {/* Breakdown từng cặp */}
+                  <div className="space-y-1.5">
+                    <p className="text-[10px] font-semibold text-[#999] uppercase tracking-wider">
+                      Chi tiết từng cặp
+                    </p>
+                    {entry.result.breakdown.map((b) => {
+                      const color =
+                        b.pairScore >= 85 ? "#54a404" :
+                        b.pairScore >= 70 ? "#2196f3" :
+                        b.pairScore >= 55 ? "#da8138" : "#e60909";
+                      return (
+                        <div key={b.label} className="flex items-center gap-2 p-2 rounded-lg bg-white border border-[#f0e8f5]">
+                          <div className="flex-1 min-w-0">
+                            <p className="text-[10px] text-[#888] truncate">{b.label}</p>
+                            <p className="text-[10px] text-[#bbb]">
+                              Con: {b.babyValue} — {entry.role}: {b.parentValue}
+                            </p>
+                          </div>
+                          <div className="text-right shrink-0">
+                            <span className="text-xs font-bold" style={{ color }}>{b.pairScore}</span>
+                            <p className="text-[9px] text-[#ccc]">{Math.round(b.weight * 100)}%</p>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
 
