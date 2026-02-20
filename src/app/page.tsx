@@ -183,7 +183,11 @@ export default function HomePage() {
           Thông tin mang tính tham khảo dựa trên thần số học Pythagorean và ngũ hành.
           Việc đặt tên nên kết hợp ý nghĩa, phong tục gia đình và sở thích cá nhân.
         </p>
-        <p className="text-xs mt-2 text-white/30">© 2026 Baby Name Numerology</p>
+        <div className="flex justify-center gap-4 mt-3">
+          <Link href="/about" className="text-[10px] text-white/40 hover:text-white/70 transition-colors">Giới thiệu</Link>
+          <Link href="/privacy" className="text-[10px] text-white/40 hover:text-white/70 transition-colors">Chính sách bảo mật</Link>
+        </div>
+        <p className="text-xs mt-2 text-white/30">© 2026 thansohoc.name.vn</p>
       </footer>
     </div>
   );

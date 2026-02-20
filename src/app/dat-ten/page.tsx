@@ -97,8 +97,12 @@ export default function Home() {
             Việc đặt tên cho bé nên kết hợp nhiều yếu tố: ý nghĩa, phong thủy,
             văn hóa gia đình.
           </p>
-          <p className="text-[10px] text-white/30 mt-4">
-            &copy; 2026 Baby Name Numerology
+          <div className="flex justify-center gap-4 mt-3">
+            <a href="/about" className="text-[10px] text-white/40 hover:text-white/70 transition-colors">Giới thiệu</a>
+            <a href="/privacy" className="text-[10px] text-white/40 hover:text-white/70 transition-colors">Chính sách bảo mật</a>
+          </div>
+          <p className="text-[10px] text-white/30 mt-3">
+            &copy; 2026 thansohoc.name.vn
           </p>
         </div>
       </footer>
