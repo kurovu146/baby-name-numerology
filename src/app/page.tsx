@@ -484,7 +484,7 @@ function SuggestTab() {
 
         {/* Row 2 */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 mt-3 md:mt-4">
-          <div>
+          <div className="overflow-hidden">
             <label className="block text-sm font-semibold text-[#555] mb-1.5">
               Ngày sinh dự kiến <span className="text-red-500">*</span>
             </label>
@@ -872,7 +872,7 @@ function AnalyzeTab() {
             <label className="block text-sm font-semibold text-[#555] mb-1.5">Họ và tên <span className="text-red-500">*</span></label>
             <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="Nguyễn Văn An" className="input-field w-full" />
           </div>
-          <div>
+          <div className="overflow-hidden">
             <label className="block text-sm font-semibold text-[#555] mb-1.5">Ngày sinh <span className="text-red-500">*</span></label>
             <input type="date" value={birthDate} onChange={(e) => setBirthDate(e.target.value)} className="input-field w-full" />
           </div>
@@ -978,7 +978,7 @@ function NicknameTab() {
                 <label className="block text-sm font-semibold text-[#555] mb-1.5">Tên khai sinh <span className="text-red-500">*</span></label>
                 <input type="text" value={suggestFullName} onChange={(e) => setSuggestFullName(e.target.value)} placeholder="Nguyễn Văn An" className="input-field w-full" />
               </div>
-              <div>
+              <div className="overflow-hidden">
                 <label className="block text-sm font-semibold text-[#555] mb-1.5">Ngày sinh <span className="text-red-500">*</span></label>
                 <input type="date" value={suggestBirthDate} onChange={(e) => setSuggestBirthDate(e.target.value)} className="input-field w-full" />
               </div>

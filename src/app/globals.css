@@ -79,17 +79,20 @@ body {
   color: #aaa;
 }
 
-/* Fix input[type="date"] trên mobile:
-   Icon calendar cần thêm space bên phải, tránh đè text */
+/* Fix input[type="date"] trên mobile iOS Safari */
 input[type="date"].input-field {
+  width: 100%;
+  min-width: 0;
   padding-right: 8px;
   min-height: 46px;
   box-sizing: border-box;
+  display: block;
 }
 /* iOS Safari: prevent date text collapse */
 input[type="date"].input-field::-webkit-date-and-time-value {
   text-align: left;
   min-height: 1.2em;
+  width: 100%;
 }
 
 /* Number badge */
