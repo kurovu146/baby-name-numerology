@@ -994,11 +994,11 @@ function NameTab() {
   }, []);
 
   return (
-    <div>
+    <div className="w-full">
       <div className="flex gap-2 mb-5 md:mb-6">
         <button
           onClick={() => { setMode("suggest"); setQueryParams({ tab: "name", mode: "suggest" }); }}
-          className={`flex-1 md:flex-none px-3 md:px-4 py-2 rounded-lg text-sm font-bold transition-all ${
+          className={`flex-1 px-3 md:px-4 py-2 rounded-lg text-sm font-bold transition-all ${
             mode === "suggest"
               ? "bg-[#af3689] text-white shadow"
               : "bg-white text-[#af3689] border border-[#e8dff0] hover:bg-[#faf5fc]"
@@ -1008,7 +1008,7 @@ function NameTab() {
         </button>
         <button
           onClick={() => { setMode("analyze"); setQueryParams({ tab: "name", mode: "analyze" }); }}
-          className={`flex-1 md:flex-none px-3 md:px-4 py-2 rounded-lg text-sm font-bold transition-all ${
+          className={`flex-1 px-3 md:px-4 py-2 rounded-lg text-sm font-bold transition-all ${
             mode === "analyze"
               ? "bg-[#af3689] text-white shadow"
               : "bg-white text-[#af3689] border border-[#e8dff0] hover:bg-[#faf5fc]"
@@ -1017,7 +1017,9 @@ function NameTab() {
           Phân tích
         </button>
       </div>
-      {mode === "suggest" ? <SuggestTab /> : <AnalyzeTab />}
+      <div className="w-full">
+        {mode === "suggest" ? <SuggestTab /> : <AnalyzeTab />}
+      </div>
     </div>
   );
 }
