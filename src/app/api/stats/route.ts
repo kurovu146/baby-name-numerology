@@ -36,7 +36,7 @@ async function fetchStats(token: string): Promise<{ stats: Stats; sha: string | 
   return { stats: JSON.parse(content), sha: data.sha };
 }
 
-// GET: fetch current stats via GitHub API (no cache)
+// GET: fetch current stats
 export async function GET() {
   try {
     const token = getGitHubToken();
@@ -51,45 +51,57 @@ export async function GET() {
   }
 }
 
-// POST: increment search counter
+// POST: increment search counter (with retry on SHA conflict)
 export async function POST() {
-  try {
-    const token = getGitHubToken();
-    if (!token) {
-      return NextResponse.json({ error: "GITHUB_TOKEN not set" }, { status: 500 });
-    }
-
-    const { stats, sha } = await fetchStats(token);
-
-    // Increment
-    stats.totalSearches += 1;
-
-    // Update file
-    const newContent = Buffer.from(
-      JSON.stringify(stats, null, 2) + "\n"
-    ).toString("base64");
-
-    const fileUrl = `https://api.github.com/repos/${REPO}/contents/${FILE_PATH}?ref=${BRANCH}`;
-    const updateRes = await fetch(fileUrl, {
-      method: "PUT",
-      headers: getGitHubHeaders(token),
-      body: JSON.stringify({
-        message: `chore: update stats (${stats.totalSearches} searches)`,
-        content: newContent,
-        sha,
-        branch: BRANCH,
-      }),
-    });
-
-    if (!updateRes.ok) {
-      const err = await updateRes.text();
-      console.error("GitHub API error:", err);
-      return NextResponse.json({ error: "Failed to update", detail: err }, { status: 500 });
-    }
-
-    return NextResponse.json(stats);
-  } catch (err) {
-    console.error("POST /api/stats error:", err);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  const token = getGitHubToken();
+  if (!token) {
+    return NextResponse.json({ error: "GITHUB_TOKEN not set", hasToken: false }, { status: 500 });
   }
+
+  const maxRetries = 3;
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      const { stats, sha } = await fetchStats(token);
+      stats.totalSearches += 1;
+
+      const newContent = Buffer.from(
+        JSON.stringify(stats, null, 2) + "\n"
+      ).toString("base64");
+
+      const fileUrl = `https://api.github.com/repos/${REPO}/contents/${FILE_PATH}?ref=${BRANCH}`;
+      const updateRes = await fetch(fileUrl, {
+        method: "PUT",
+        headers: getGitHubHeaders(token),
+        body: JSON.stringify({
+          message: `chore: update stats (${stats.totalSearches} searches)`,
+          content: newContent,
+          sha,
+          branch: BRANCH,
+        }),
+      });
+
+      if (updateRes.ok) {
+        return NextResponse.json(stats);
+      }
+
+      const errText = await updateRes.text();
+      // 409 = SHA conflict, retry
+      if (updateRes.status === 409 && attempt < maxRetries - 1) {
+        continue;
+      }
+
+      return NextResponse.json(
+        { error: "GitHub API error", status: updateRes.status, detail: errText },
+        { status: 500 }
+      );
+    } catch (err) {
+      if (attempt < maxRetries - 1) continue;
+      return NextResponse.json(
+        { error: "Internal error", detail: String(err) },
+        { status: 500 }
+      );
+    }
+  }
+
+  return NextResponse.json({ error: "Max retries exceeded" }, { status: 500 });
 }

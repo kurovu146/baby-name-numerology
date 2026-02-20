@@ -33,9 +33,10 @@ export default function Home() {
 
   // Fetch stats
   useEffect(() => {
-    fetch("/api/stats").then((r) => r.json()).then((d) => {
-      setTotalSearches(d.totalSearches ?? 0);
-    }).catch(() => {});
+    fetch("/api/stats", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((d) => setTotalSearches(d.totalSearches ?? 0))
+      .catch(() => {});
   }, []);
 
   return (
