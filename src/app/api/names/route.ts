@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 const REPO = "kurovu146/baby-name-numerology";
 const FILE_PATH = "public/data/custom-names.json";
 const BRANCH = "main";
