@@ -156,7 +156,7 @@ function DatePicker({ value, onChange, yearRange, className }: DatePickerProps) 
   }
 
   return (
-    <div className={`flex gap-1.5 ${className ?? ""}`}>
+    <div className={`flex gap-1.5 w-full ${className ?? ""}`}>
       {/* Ngày */}
       <select
         value={day || ""}
