@@ -92,10 +92,13 @@ export function suggestNames(options: SuggestOptions): NameSuggestion[] {
         : mid.name;
       const fullName = `${lastName} ${middlePart} ${first.name}`;
 
-      // Kiêng tên gia phả: bỏ qua nếu tên chứa từ trùng
+      // Kiêng tên gia phả: bỏ qua nếu bất kỳ phần nào của tên trùng
       if (excluded.length > 0) {
-        const nameLower = first.name.toLowerCase();
-        if (excluded.some((ex) => nameLower === ex)) continue;
+        const parts = [mid.name, middleName2, first.name]
+          .filter(Boolean)
+          .flatMap((p) => p!.split(/\s+/))
+          .map((p) => p.toLowerCase());
+        if (parts.some((p) => excluded.includes(p))) continue;
       }
 
       const analysis = analyzeFullName(fullName, birthDate);
