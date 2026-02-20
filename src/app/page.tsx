@@ -268,7 +268,7 @@ export default function Home() {
           </p>
 
           {/* Tab Switcher */}
-          <div className="flex flex-wrap justify-center gap-2 mt-5">
+          <div className="grid grid-cols-4 gap-1 mt-5 max-w-xs mx-auto md:max-w-none md:flex md:flex-wrap md:justify-center md:gap-2">
             {[
               { key: "suggest" as Tab, label: "Gợi ý tên" },
               { key: "analyze" as Tab, label: "Phân tích" },
@@ -278,7 +278,7 @@ export default function Home() {
               <button
                 key={t.key}
                 onClick={() => { setTab(t.key); setQueryParams({ tab: t.key }); }}
-                className={`px-4 py-2 rounded-full text-sm font-bold transition-all ${
+                className={`px-2 md:px-4 py-2 rounded-full text-xs md:text-sm font-bold transition-all text-center ${
                   tab === t.key
                     ? "bg-white text-[#af3689] shadow-lg"
                     : "bg-white/20 text-white hover:bg-white/30 border border-white/30"
@@ -591,9 +591,9 @@ function SuggestTab() {
         <div>
           {/* Filter & Sort bar */}
           <div className="result-card p-3 md:p-4 mb-4">
-            <div className="grid grid-cols-2 md:flex md:flex-wrap items-center gap-2 md:gap-3">
-              <div className="flex items-center gap-1.5 md:gap-2">
-                <label className="text-xs font-semibold text-[#555] whitespace-nowrap">Điểm tối thiểu:</label>
+            <div className="grid grid-cols-1 sm:grid-cols-3 md:flex md:flex-wrap items-center gap-2 md:gap-3">
+              <div className="flex items-center gap-2">
+                <label className="text-xs font-semibold text-[#555] whitespace-nowrap w-24 sm:w-auto">Điểm tối thiểu:</label>
                 <select value={minScore} onChange={(e) => setMinScore(Number(e.target.value))} className="input-field text-xs py-1 px-2 flex-1">
                   <option value={0}>Tất cả</option>
                   <option value={55}>&ge; 55</option>
@@ -601,16 +601,16 @@ function SuggestTab() {
                   <option value={85}>&ge; 85</option>
                 </select>
               </div>
-              <div className="flex items-center gap-1.5 md:gap-2">
-                <label className="text-xs font-semibold text-[#555] whitespace-nowrap">Sắp xếp:</label>
+              <div className="flex items-center gap-2">
+                <label className="text-xs font-semibold text-[#555] whitespace-nowrap w-24 sm:w-auto">Sắp xếp:</label>
                 <select value={sortBy} onChange={(e) => setSortBy(e.target.value as "score" | "name" | "expression")} className="input-field text-xs py-1 px-2 flex-1">
                   <option value="score">Điểm cao nhất</option>
                   <option value="name">A-Z</option>
                   <option value="expression">Số Sứ mệnh</option>
                 </select>
               </div>
-              <div className="flex items-center gap-1.5 md:gap-2">
-                <label className="text-xs font-semibold text-[#555] whitespace-nowrap">Ngũ hành:</label>
+              <div className="flex items-center gap-2">
+                <label className="text-xs font-semibold text-[#555] whitespace-nowrap w-24 sm:w-auto">Ngũ hành:</label>
                 <select value={filterHanh} onChange={(e) => setFilterHanh(e.target.value as NguHanh | "all")} className="input-field text-xs py-1 px-2 flex-1">
                   <option value="all">Tất cả</option>
                   <option value="Kim">Kim</option>
@@ -621,7 +621,7 @@ function SuggestTab() {
                 </select>
               </div>
               {compareList.length >= 2 && (
-                <button onClick={() => setShowCompare(true)} className="col-span-2 md:col-auto md:ml-auto px-3 py-1.5 bg-[#af3689] text-white text-xs font-bold rounded-lg hover:bg-[#8a2b6d] transition-colors">
+                <button onClick={() => setShowCompare(true)} className="sm:col-span-3 md:col-auto md:ml-auto px-3 py-2 bg-[#af3689] text-white text-xs font-bold rounded-lg hover:bg-[#8a2b6d] transition-colors w-full sm:w-auto">
                   So sánh ({compareList.length})
                 </button>
               )}
@@ -716,35 +716,37 @@ function SuggestionCard({
   return (
     <div className={`result-card overflow-hidden ${isComparing ? "ring-2 ring-[#af3689]" : ""}`}>
       <div className="p-3 md:p-4 cursor-pointer hover:bg-[#faf5fc] transition-colors" onClick={() => setExpanded(!expanded)}>
-        <div className="flex items-center gap-2 md:gap-3">
-          <span className="number-badge w-7 h-7 md:w-8 md:h-8 text-xs shrink-0">{rank}</span>
+        {/* Dòng 1: rank + tên + emoji */}
+        <div className="flex items-center gap-2 mb-2">
+          <span className="number-badge w-7 h-7 text-xs shrink-0">{rank}</span>
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-1.5 md:gap-2">
-              <h3 className="font-bold text-[#333] text-sm md:text-base truncate">{suggestion.fullName}</h3>
+            <div className="flex items-center gap-1.5">
+              <h3 className="font-bold text-[#333] text-sm truncate">{suggestion.fullName}</h3>
               {analysis.nguHanh && (
-                <span className="text-sm" title={`Mệnh tên: ${analysis.nguHanh.nameHanh}`}>
+                <span className="text-sm shrink-0" title={`Mệnh tên: ${analysis.nguHanh.nameHanh}`}>
                   {NGU_HANH_INFO[analysis.nguHanh.nameHanh].emoji}
                 </span>
               )}
             </div>
             <p className="text-xs text-[#888] truncate">{suggestion.meaning}</p>
           </div>
-          <div className="flex items-center gap-1 md:gap-1.5 shrink-0">
-            <button onClick={toggleFav} className="w-7 h-7 md:w-8 md:h-8 flex items-center justify-center rounded-full hover:bg-[#fce4f0] transition-colors" title={fav ? "Bỏ yêu thích" : "Lưu yêu thích"}>
-              <span className={`text-base md:text-lg ${fav ? "text-red-500" : "text-[#ccc]"}`}>{fav ? "♥" : "♡"}</span>
-            </button>
-            <button onClick={(e) => { e.stopPropagation(); onToggleCompare(); }}
-              className={`w-6 h-6 md:w-7 md:h-7 flex items-center justify-center rounded text-xs font-bold border transition-colors ${isComparing ? "bg-[#af3689] text-white border-[#af3689]" : "text-[#af3689] border-[#e8dff0] hover:bg-[#faf5fc]"}`}
-              title="Thêm vào so sánh">
-              {isComparing ? "✓" : "VS"}
-            </button>
-            <div className="text-right ml-0.5 md:ml-1">
-              <span className={`text-xs font-bold ${cfg.text}`}>{cfg.label}</span>
-              <div className="compat-bar w-14 md:w-16 mt-1">
-                <div className="compat-bar-fill" style={{ width: `${compat.score}%`, background: barColor }} />
-              </div>
+          <span className="text-[#bbb] text-xs shrink-0">{expanded ? "▲" : "▼"}</span>
+        </div>
+        {/* Dòng 2: actions + compat bar */}
+        <div className="flex items-center gap-1.5 pl-9">
+          <button onClick={toggleFav} className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-[#fce4f0] transition-colors shrink-0" title={fav ? "Bỏ yêu thích" : "Lưu yêu thích"}>
+            <span className={`text-base ${fav ? "text-red-500" : "text-[#ccc]"}`}>{fav ? "♥" : "♡"}</span>
+          </button>
+          <button onClick={(e) => { e.stopPropagation(); onToggleCompare(); }}
+            className={`px-2 py-0.5 flex items-center justify-center rounded text-xs font-bold border transition-colors shrink-0 ${isComparing ? "bg-[#af3689] text-white border-[#af3689]" : "text-[#af3689] border-[#e8dff0] hover:bg-[#faf5fc]"}`}
+            title="Thêm vào so sánh">
+            {isComparing ? "✓ Đang chọn" : "+ So sánh"}
+          </button>
+          <div className="flex-1 flex items-center gap-2 justify-end">
+            <span className={`text-xs font-bold whitespace-nowrap ${cfg.text}`}>{cfg.label} {compat.score}%</span>
+            <div className="compat-bar w-16">
+              <div className="compat-bar-fill" style={{ width: `${compat.score}%`, background: barColor }} />
             </div>
-            <span className="text-[#bbb] text-xs">{expanded ? "▲" : "▼"}</span>
           </div>
         </div>
       </div>
@@ -1010,18 +1012,18 @@ function NicknameTab() {
                   const levelLabel = level === "excellent" ? "Rất hợp" : level === "good" ? "Hợp" : level === "neutral" ? "Trung bình" : "Thử thách";
                   return (
                     <div key={i} className="result-card p-3 md:p-4">
-                      <div className="flex items-center gap-2 md:gap-3">
-                        <span className="number-badge w-7 h-7 md:w-8 md:h-8 text-xs shrink-0">{i + 1}</span>
+                      <div className="flex items-start gap-2 md:gap-3">
+                        <span className="number-badge w-7 h-7 md:w-8 md:h-8 text-xs shrink-0 mt-0.5">{i + 1}</span>
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <h3 className="font-bold text-[#333] text-sm md:text-base">{s.nickname}</h3>
-                            <span className="px-2 py-0.5 bg-[#af3689]/10 text-[#af3689] text-[10px] rounded-full">{CATEGORY_LABELS[s.category] || s.category}</span>
+                          <div className="flex items-center gap-1.5 mb-0.5">
+                            <h3 className="font-bold text-[#333] text-sm md:text-base truncate">{s.nickname}</h3>
+                            <span className="px-1.5 py-0.5 bg-[#af3689]/10 text-[#af3689] text-[9px] rounded-full shrink-0 whitespace-nowrap">{CATEGORY_LABELS[s.category] || s.category}</span>
                           </div>
-                          <p className="text-xs text-[#888]">{s.meaning}</p>
+                          <p className="text-xs text-[#888] line-clamp-2">{s.meaning}</p>
                         </div>
                         <div className="text-right shrink-0">
-                          <span className="text-xs font-bold" style={{ color: barColor }}>{levelLabel}</span>
-                          <div className="compat-bar w-14 md:w-16 mt-1">
+                          <span className="text-[11px] font-bold" style={{ color: barColor }}>{levelLabel}</span>
+                          <div className="compat-bar w-12 md:w-16 mt-1">
                             <div className="compat-bar-fill" style={{ width: `${score}%`, background: barColor }} />
                           </div>
                         </div>
@@ -1086,7 +1088,7 @@ function NicknameTab() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-2 md:gap-3 mb-5">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 md:gap-3 mb-5">
                 {[
                   { label: "Minor Expression", sub: "Thể hiện", value: result.minorExpression, color: "#af3689" },
                   { label: "Minor Soul Urge", sub: "Linh hồn", value: result.minorSoulUrge, color: "#da8138" },
@@ -1094,13 +1096,13 @@ function NicknameTab() {
                 ].map((idx) => {
                   const meaning = getMeaning(idx.value);
                   return (
-                    <div key={idx.label} className="p-2 md:p-3 rounded-lg border border-[#e8dff0] bg-white hover:shadow-md transition-shadow">
-                      <p className="text-[9px] md:text-[10px] text-[#999] uppercase tracking-wider mb-1">{idx.sub}</p>
-                      <div className="flex items-center gap-1.5 md:gap-2">
-                        <span className="number-badge w-8 h-8 md:w-10 md:h-10 text-sm md:text-base shrink-0" style={{ background: `linear-gradient(135deg, ${idx.color}, ${idx.color}cc)` }}>{idx.value}</span>
+                    <div key={idx.label} className="p-2 md:p-3 rounded-lg border border-[#e8dff0] bg-white hover:shadow-md transition-shadow flex sm:flex-col items-center sm:items-start gap-3 sm:gap-1">
+                      <p className="text-[10px] text-[#999] uppercase tracking-wider hidden sm:block">{idx.sub}</p>
+                      <div className="flex items-center gap-2 sm:gap-1.5">
+                        <span className="number-badge w-9 h-9 md:w-10 md:h-10 text-base shrink-0" style={{ background: `linear-gradient(135deg, ${idx.color}, ${idx.color}cc)` }}>{idx.value}</span>
                         <div className="min-w-0">
-                          <p className="text-[10px] md:text-xs font-semibold text-[#333] truncate">{meaning.name}</p>
-                          <p className="text-[9px] md:text-[10px] text-[#aaa] hidden md:block">{idx.label}</p>
+                          <p className="text-[10px] text-[#999] sm:hidden">{idx.sub}</p>
+                          <p className="text-xs font-semibold text-[#333]">{meaning.name}</p>
                         </div>
                       </div>
                     </div>
