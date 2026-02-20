@@ -53,7 +53,7 @@ export default function Home() {
           </p>
           {totalSearches !== null && (
             <p className="text-white/50 text-xs mt-2">
-              {totalSearches.toLocaleString("vi-VN")} lượt tìm kiếm
+              {totalSearches.toLocaleString("vi-VN")} lượt sử dụng
             </p>
           )}
 
