@@ -67,6 +67,8 @@ body {
   font-size: 0.95rem;
   color: var(--text-main);
   transition: border-color 0.2s ease;
+  box-sizing: border-box;
+  max-width: 100%;
 }
 .input-field:focus {
   border-color: var(--primary);
