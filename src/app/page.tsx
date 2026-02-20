@@ -100,28 +100,28 @@ export default function Home() {
   return (
     <>
       {/* Hero Header */}
-      <header className="hero-gradient text-white py-10 px-4">
+      <header className="hero-gradient text-white py-8 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-3xl md:text-4xl font-bold mb-3 drop-shadow-md">
-            Dat Ten Be Theo Than So Hoc
+          <h1 className="text-2xl md:text-4xl font-bold mb-2 md:mb-3 drop-shadow-md leading-tight">
+            Đặt Tên Bé Theo Thần Số Học
           </h1>
-          <p className="text-white/80 text-sm md:text-base max-w-xl mx-auto">
-            Tim ten hay, hop menh cho be yeu dua tren phuong phap Pythagorean
-            Numerology ket hop Ngu Hanh
+          <p className="text-white/80 text-sm md:text-base max-w-xl mx-auto leading-relaxed">
+            Tìm tên hay, hợp mệnh cho bé yêu dựa trên phương pháp Pythagorean
+            Numerology kết hợp Ngũ Hành
           </p>
 
           {/* Tab Switcher */}
-          <div className="flex flex-wrap justify-center gap-2 mt-6">
+          <div className="flex flex-wrap justify-center gap-2 mt-5">
             {[
-              { key: "suggest" as Tab, label: "Goi y ten" },
-              { key: "analyze" as Tab, label: "Phan tich" },
-              { key: "nickname" as Tab, label: "Biet danh" },
-              { key: "favorites" as Tab, label: "Da luu" },
+              { key: "suggest" as Tab, label: "Gợi ý tên" },
+              { key: "analyze" as Tab, label: "Phân tích" },
+              { key: "nickname" as Tab, label: "Biệt danh" },
+              { key: "favorites" as Tab, label: "Đã lưu" },
             ].map((t) => (
               <button
                 key={t.key}
                 onClick={() => { setTab(t.key); setQueryParams({ tab: t.key }); }}
-                className={`px-5 py-2 rounded-full text-sm font-bold transition-all uppercase tracking-wide ${
+                className={`px-4 py-2 rounded-full text-sm font-bold transition-all ${
                   tab === t.key
                     ? "bg-white text-[#af3689] shadow-lg"
                     : "bg-white/20 text-white hover:bg-white/30 border border-white/30"
@@ -134,20 +134,20 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-4 py-8 flex-1">
+      <main className="max-w-4xl mx-auto px-3 md:px-4 py-6 md:py-8 flex-1">
         {tab === "suggest" && <SuggestTab />}
         {tab === "analyze" && <AnalyzeTab />}
         {tab === "nickname" && <NicknameTab />}
         {tab === "favorites" && <FavoritesTab />}
       </main>
 
-      <footer className="bg-[#15143e] text-white/60 py-8 px-4 mt-auto">
+      <footer className="bg-[#15143e] text-white/60 py-6 md:py-8 px-4 mt-auto">
         <div className="max-w-4xl mx-auto text-center">
           <p className="text-xs leading-relaxed">
-            Ket qua chi mang tinh tham khao dua tren than so hoc Pythagorean va Ngu Hanh.
+            Kết quả chỉ mang tính tham khảo dựa trên thần số học Pythagorean và Ngũ Hành.
             <br />
-            Viec dat ten cho be nen ket hop nhieu yeu to: y nghia, phong thuy,
-            van hoa gia dinh.
+            Việc đặt tên cho bé nên kết hợp nhiều yếu tố: ý nghĩa, phong thủy,
+            văn hóa gia đình.
           </p>
           <p className="text-[10px] text-white/30 mt-4">
             &copy; 2026 Baby Name Numerology
@@ -159,7 +159,7 @@ export default function Home() {
 }
 
 // ============================================================================
-// Tab: Goi y ten
+// Tab: Gợi ý tên
 // ============================================================================
 
 function SuggestTab() {
@@ -271,23 +271,23 @@ function SuggestTab() {
   return (
     <div>
       {/* Form */}
-      <div className="result-card p-6 mb-8">
-        <h2 className="text-lg font-bold text-[#af3689] mb-4 flex items-center gap-2">
+      <div className="result-card p-4 md:p-6 mb-6 md:mb-8">
+        <h2 className="text-base md:text-lg font-bold text-[#af3689] mb-4 flex items-center gap-2">
           <span className="w-1 h-6 bg-[#af3689] rounded-full"></span>
-          Nhap thong tin
+          Nhập thông tin
         </h2>
         {/* Row 1 */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
           <div>
             <label className="block text-sm font-semibold text-[#555] mb-1.5">
-              Ho <span className="text-red-500">*</span>
+              Họ <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               list="lastnames"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
-              placeholder="Nguyen"
+              placeholder="Nguyễn"
               className="input-field w-full"
             />
             <datalist id="lastnames">
@@ -296,52 +296,52 @@ function SuggestTab() {
           </div>
           <div>
             <label className="block text-sm font-semibold text-[#555] mb-1.5">
-              Ten dem 1
+              Tên đệm 1
             </label>
             <input
               type="text"
               value={middleName}
               onChange={(e) => setMiddleName(e.target.value)}
-              placeholder="Thi, Van..."
+              placeholder="Thị, Văn..."
               className="input-field w-full"
             />
           </div>
           <div>
             <label className="block text-sm font-semibold text-[#555] mb-1.5">
-              Ten dem 2
+              Tên đệm 2
             </label>
             <input
               type="text"
               value={middleName2}
               onChange={(e) => setMiddleName2(e.target.value)}
-              placeholder="Ngoc, Minh..."
+              placeholder="Ngọc, Minh..."
               className="input-field w-full"
             />
-            <p className="text-[10px] text-[#aaa] mt-1">Cho ten 4 tu (tuy chon)</p>
+            <p className="text-[10px] text-[#aaa] mt-1">Cho tên 4 từ (tùy chọn)</p>
           </div>
         </div>
 
         {/* Row 2 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 mt-3 md:mt-4">
           <div>
             <label className="block text-sm font-semibold text-[#555] mb-1.5">
-              Ngay sinh du kien <span className="text-red-500">*</span>
+              Ngày sinh dự kiến <span className="text-red-500">*</span>
             </label>
             <input type="date" value={birthDate} onChange={(e) => setBirthDate(e.target.value)} className="input-field w-full" />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-[#555] mb-1.5">Gioi tinh</label>
+            <label className="block text-sm font-semibold text-[#555] mb-1.5">Giới tính</label>
             <select value={gender} onChange={(e) => setGender(e.target.value as "male" | "female" | "all")} className="input-field w-full">
-              <option value="all">Tat ca</option>
+              <option value="all">Tất cả</option>
               <option value="male">Nam</option>
-              <option value="female">Nu</option>
+              <option value="female">Nữ</option>
             </select>
           </div>
         </div>
 
-        {/* Row 3: Ten kieng */}
-        <div className="mt-4">
-          <label className="block text-sm font-semibold text-[#555] mb-1.5">Ten kieng (gia pha)</label>
+        {/* Row 3: Tên kiêng */}
+        <div className="mt-3 md:mt-4">
+          <label className="block text-sm font-semibold text-[#555] mb-1.5">Tên kiêng (gia phả)</label>
           {excludeList.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mb-2">
               {excludeList.map((name) => (
@@ -365,7 +365,7 @@ function SuggestTab() {
                   setExcludeInput(""); setExcludeOpen(false);
                 }
               }}
-              placeholder="Go ten de tim, VD: Hung, Lan..."
+              placeholder="Gõ tên để tìm, VD: Hùng, Lan..."
               className="input-field w-full"
             />
             {excludeOpen && filteredExclude.length > 0 && (
@@ -379,16 +379,16 @@ function SuggestTab() {
               </div>
             )}
           </div>
-          <p className="text-[10px] text-[#aaa] mt-1">Go ten can tranh, chon tu goi y hoac nhan Enter</p>
+          <p className="text-[10px] text-[#aaa] mt-1">Gõ tên cần tránh, chọn từ gợi ý hoặc nhấn Enter</p>
         </div>
 
         {/* Life Path + Can Chi preview */}
         {lifePath > 0 && (
-          <div className="mt-4 p-4 bg-gradient-to-r from-[#f3e7f9] to-[#fce4f0] rounded-lg border border-[#e0c5eb]">
+          <div className="mt-4 p-3 md:p-4 bg-gradient-to-r from-[#f3e7f9] to-[#fce4f0] rounded-lg border border-[#e0c5eb]">
             <div className="flex items-center gap-3 flex-wrap">
-              <span className="number-badge w-12 h-12 text-xl">{lifePath}</span>
+              <span className="number-badge w-11 h-11 md:w-12 md:h-12 text-lg md:text-xl shrink-0">{lifePath}</span>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-bold text-[#af3689]">So Duong Doi (Life Path)</p>
+                <p className="text-sm font-bold text-[#af3689]">Số Đường Đời (Life Path)</p>
                 <p className="text-xs text-[#555]">{getMeaning(lifePath).name} — {getMeaning(lifePath).keywords.join(", ")}</p>
               </div>
               {canChi && (
@@ -398,7 +398,7 @@ function SuggestTab() {
                     <p className="text-xs font-bold" style={{ color: NGU_HANH_INFO[canChi.nguHanh].color }}>
                       {canChi.can} {canChi.chi}
                     </p>
-                    <p className="text-[10px] text-[#888]">Menh {canChi.nguHanh} — {canChi.amDuong}</p>
+                    <p className="text-[10px] text-[#888]">Mệnh {canChi.nguHanh} — {canChi.amDuong}</p>
                   </div>
                 </div>
               )}
@@ -406,8 +406,8 @@ function SuggestTab() {
           </div>
         )}
 
-        <button onClick={handleSearch} disabled={!lastName.trim() || !birthDate} className="btn-primary mt-5 w-full py-3.5 text-sm uppercase tracking-wider">
-          Tim ten hop menh
+        <button onClick={handleSearch} disabled={!lastName.trim() || !birthDate} className="btn-primary mt-4 md:mt-5 w-full py-3 md:py-3.5 text-sm uppercase tracking-wider">
+          Tìm tên hợp mệnh
         </button>
       </div>
 
@@ -415,52 +415,52 @@ function SuggestTab() {
       {searched && (
         <div>
           {/* Filter & Sort bar */}
-          <div className="result-card p-4 mb-4">
-            <div className="flex flex-wrap items-center gap-3">
-              <div className="flex items-center gap-2">
-                <label className="text-xs font-semibold text-[#555]">Diem toi thieu:</label>
-                <select value={minScore} onChange={(e) => setMinScore(Number(e.target.value))} className="input-field text-xs py-1 px-2">
-                  <option value={0}>Tat ca</option>
+          <div className="result-card p-3 md:p-4 mb-4">
+            <div className="grid grid-cols-2 md:flex md:flex-wrap items-center gap-2 md:gap-3">
+              <div className="flex items-center gap-1.5 md:gap-2">
+                <label className="text-xs font-semibold text-[#555] whitespace-nowrap">Điểm tối thiểu:</label>
+                <select value={minScore} onChange={(e) => setMinScore(Number(e.target.value))} className="input-field text-xs py-1 px-2 flex-1">
+                  <option value={0}>Tất cả</option>
                   <option value={55}>&ge; 55</option>
                   <option value={70}>&ge; 70</option>
                   <option value={85}>&ge; 85</option>
                 </select>
               </div>
-              <div className="flex items-center gap-2">
-                <label className="text-xs font-semibold text-[#555]">Sap xep:</label>
-                <select value={sortBy} onChange={(e) => setSortBy(e.target.value as "score" | "name" | "expression")} className="input-field text-xs py-1 px-2">
-                  <option value="score">Diem cao nhat</option>
+              <div className="flex items-center gap-1.5 md:gap-2">
+                <label className="text-xs font-semibold text-[#555] whitespace-nowrap">Sắp xếp:</label>
+                <select value={sortBy} onChange={(e) => setSortBy(e.target.value as "score" | "name" | "expression")} className="input-field text-xs py-1 px-2 flex-1">
+                  <option value="score">Điểm cao nhất</option>
                   <option value="name">A-Z</option>
-                  <option value="expression">So Su menh</option>
+                  <option value="expression">Số Sứ mệnh</option>
                 </select>
               </div>
-              <div className="flex items-center gap-2">
-                <label className="text-xs font-semibold text-[#555]">Ngu hanh:</label>
-                <select value={filterHanh} onChange={(e) => setFilterHanh(e.target.value as NguHanh | "all")} className="input-field text-xs py-1 px-2">
-                  <option value="all">Tat ca</option>
+              <div className="flex items-center gap-1.5 md:gap-2">
+                <label className="text-xs font-semibold text-[#555] whitespace-nowrap">Ngũ hành:</label>
+                <select value={filterHanh} onChange={(e) => setFilterHanh(e.target.value as NguHanh | "all")} className="input-field text-xs py-1 px-2 flex-1">
+                  <option value="all">Tất cả</option>
                   <option value="Kim">Kim</option>
-                  <option value="Mộc">Moc</option>
-                  <option value="Thủy">Thuy</option>
-                  <option value="Hỏa">Hoa</option>
-                  <option value="Thổ">Tho</option>
+                  <option value="Mộc">Mộc</option>
+                  <option value="Thủy">Thủy</option>
+                  <option value="Hỏa">Hỏa</option>
+                  <option value="Thổ">Thổ</option>
                 </select>
               </div>
               {compareList.length >= 2 && (
-                <button onClick={() => setShowCompare(true)} className="ml-auto px-3 py-1.5 bg-[#af3689] text-white text-xs font-bold rounded-lg hover:bg-[#8a2b6d] transition-colors">
-                  So sanh ({compareList.length})
+                <button onClick={() => setShowCompare(true)} className="col-span-2 md:col-auto md:ml-auto px-3 py-1.5 bg-[#af3689] text-white text-xs font-bold rounded-lg hover:bg-[#8a2b6d] transition-colors">
+                  So sánh ({compareList.length})
                 </button>
               )}
             </div>
           </div>
 
-          <h2 className="text-xl font-bold text-[#555] mb-4 flex items-center gap-2">
+          <h2 className="text-lg md:text-xl font-bold text-[#555] mb-4 flex items-center gap-2">
             <span className="w-1 h-6 bg-[#da8138] rounded-full"></span>
-            Goi y ten
-            <span className="text-sm font-normal text-[#999]">({displayResults.length} ket qua)</span>
+            Gợi ý tên
+            <span className="text-sm font-normal text-[#999]">({displayResults.length} kết quả)</span>
           </h2>
 
           {displayResults.length === 0 ? (
-            <p className="text-[#999]">Khong tim thay ket qua. Hay thu thay doi tieu chi.</p>
+            <p className="text-[#999]">Không tìm thấy kết quả. Hãy thử thay đổi tiêu chí.</p>
           ) : (
             <div className="grid gap-3">
               {displayResults.map((s, i) => (
@@ -510,10 +510,10 @@ function SuggestionCard({
   }, [suggestion.fullName, analysis.birthDate]);
 
   const levelConfig = {
-    excellent: { text: "text-[#54a404]", label: "Rat hop" },
-    good: { text: "text-[#2196f3]", label: "Hop" },
-    neutral: { text: "text-[#da8138]", label: "Trung binh" },
-    challenging: { text: "text-[#e60909]", label: "Thu thach" },
+    excellent: { text: "text-[#54a404]", label: "Rất hợp" },
+    good: { text: "text-[#2196f3]", label: "Hợp" },
+    neutral: { text: "text-[#da8138]", label: "Trung bình" },
+    challenging: { text: "text-[#e60909]", label: "Thử thách" },
   };
 
   const cfg = levelConfig[compat.level];
@@ -537,32 +537,32 @@ function SuggestionCard({
 
   return (
     <div className={`result-card overflow-hidden ${isComparing ? "ring-2 ring-[#af3689]" : ""}`}>
-      <div className="p-4 cursor-pointer hover:bg-[#faf5fc] transition-colors" onClick={() => setExpanded(!expanded)}>
-        <div className="flex items-center gap-3">
-          <span className="number-badge w-8 h-8 text-xs shrink-0">{rank}</span>
+      <div className="p-3 md:p-4 cursor-pointer hover:bg-[#faf5fc] transition-colors" onClick={() => setExpanded(!expanded)}>
+        <div className="flex items-center gap-2 md:gap-3">
+          <span className="number-badge w-7 h-7 md:w-8 md:h-8 text-xs shrink-0">{rank}</span>
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2">
-              <h3 className="font-bold text-[#333] text-base truncate">{suggestion.fullName}</h3>
+            <div className="flex items-center gap-1.5 md:gap-2">
+              <h3 className="font-bold text-[#333] text-sm md:text-base truncate">{suggestion.fullName}</h3>
               {analysis.nguHanh && (
-                <span className="text-sm" title={`Menh ten: ${analysis.nguHanh.nameHanh}`}>
+                <span className="text-sm" title={`Mệnh tên: ${analysis.nguHanh.nameHanh}`}>
                   {NGU_HANH_INFO[analysis.nguHanh.nameHanh].emoji}
                 </span>
               )}
             </div>
             <p className="text-xs text-[#888] truncate">{suggestion.meaning}</p>
           </div>
-          <div className="flex items-center gap-1.5 shrink-0">
-            <button onClick={toggleFav} className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#fce4f0] transition-colors" title={fav ? "Bo yeu thich" : "Luu yeu thich"}>
-              <span className={`text-lg ${fav ? "text-red-500" : "text-[#ccc]"}`}>{fav ? "♥" : "♡"}</span>
+          <div className="flex items-center gap-1 md:gap-1.5 shrink-0">
+            <button onClick={toggleFav} className="w-7 h-7 md:w-8 md:h-8 flex items-center justify-center rounded-full hover:bg-[#fce4f0] transition-colors" title={fav ? "Bỏ yêu thích" : "Lưu yêu thích"}>
+              <span className={`text-base md:text-lg ${fav ? "text-red-500" : "text-[#ccc]"}`}>{fav ? "♥" : "♡"}</span>
             </button>
             <button onClick={(e) => { e.stopPropagation(); onToggleCompare(); }}
-              className={`w-7 h-7 flex items-center justify-center rounded text-xs font-bold border transition-colors ${isComparing ? "bg-[#af3689] text-white border-[#af3689]" : "text-[#af3689] border-[#e8dff0] hover:bg-[#faf5fc]"}`}
-              title="Them vao so sanh">
+              className={`w-6 h-6 md:w-7 md:h-7 flex items-center justify-center rounded text-xs font-bold border transition-colors ${isComparing ? "bg-[#af3689] text-white border-[#af3689]" : "text-[#af3689] border-[#e8dff0] hover:bg-[#faf5fc]"}`}
+              title="Thêm vào so sánh">
               {isComparing ? "✓" : "VS"}
             </button>
-            <div className="text-right ml-1">
+            <div className="text-right ml-0.5 md:ml-1">
               <span className={`text-xs font-bold ${cfg.text}`}>{cfg.label}</span>
-              <div className="compat-bar w-16 mt-1">
+              <div className="compat-bar w-14 md:w-16 mt-1">
                 <div className="compat-bar-fill" style={{ width: `${compat.score}%`, background: barColor }} />
               </div>
             </div>
@@ -572,7 +572,7 @@ function SuggestionCard({
       </div>
 
       {expanded && (
-        <div className="px-4 pb-4 border-t border-[#f0e8f5]">
+        <div className="px-3 md:px-4 pb-4 border-t border-[#f0e8f5]">
           <AnalysisDetail result={analysis} showNguHanh />
           <ShareButton name={suggestion.fullName} birthDate={analysis.birthDate} />
         </div>
@@ -587,10 +587,10 @@ function SuggestionCard({
 
 function CompareModal({ names, onClose }: { names: NameSuggestion[]; onClose: () => void }) {
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={onClose}>
-      <div className="bg-white rounded-xl max-w-5xl w-full max-h-[85vh] overflow-auto p-6" onClick={(e) => e.stopPropagation()}>
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-[#af3689]">So sanh ten</h2>
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-3 md:p-4" onClick={onClose}>
+      <div className="bg-white rounded-xl max-w-5xl w-full max-h-[90vh] md:max-h-[85vh] overflow-auto p-4 md:p-6" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center justify-between mb-4 md:mb-6">
+          <h2 className="text-lg md:text-xl font-bold text-[#af3689]">So sánh tên</h2>
           <button onClick={onClose} className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#f0e8f5] text-[#999] text-xl">&times;</button>
         </div>
 
@@ -599,39 +599,39 @@ function CompareModal({ names, onClose }: { names: NameSuggestion[]; onClose: ()
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[#e8dff0]">
-                <th className="text-left py-2 px-3 text-[#999] font-semibold">Chi so</th>
+                <th className="text-left py-2 px-2 md:px-3 text-[#999] font-semibold text-xs md:text-sm">Chỉ số</th>
                 {names.map((n) => (
-                  <th key={n.fullName} className="text-center py-2 px-3 font-bold text-[#333]">{n.fullName}</th>
+                  <th key={n.fullName} className="text-center py-2 px-2 md:px-3 font-bold text-[#333] text-xs md:text-sm">{n.fullName}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {[
-                { label: "Tuong hop", key: "score" },
-                { label: "Duong Doi", key: "lifePath" },
-                { label: "Su Menh", key: "expression" },
-                { label: "Linh Hon", key: "soulUrge" },
-                { label: "Nhan Cach", key: "personality" },
-                { label: "Truong Thanh", key: "maturity" },
-                { label: "Ngay Sinh", key: "birthday" },
-                { label: "Ngu Hanh", key: "nguHanh" },
+                { label: "Tương hợp", key: "score" },
+                { label: "Đường Đời", key: "lifePath" },
+                { label: "Sứ Mệnh", key: "expression" },
+                { label: "Linh Hồn", key: "soulUrge" },
+                { label: "Nhân Cách", key: "personality" },
+                { label: "Trưởng Thành", key: "maturity" },
+                { label: "Ngày Sinh", key: "birthday" },
+                { label: "Ngũ Hành", key: "nguHanh" },
               ].map((row) => (
                 <tr key={row.key} className="border-b border-[#f0e8f5]">
-                  <td className="py-2 px-3 text-[#888] font-semibold">{row.label}</td>
+                  <td className="py-2 px-2 md:px-3 text-[#888] font-semibold text-xs md:text-sm">{row.label}</td>
                   {names.map((n) => {
                     const a = n.analysis;
                     let value: string | number = "";
                     if (row.key === "score") value = `${a.compatibility.score}%`;
                     else if (row.key === "nguHanh") value = a.nguHanh ? `${NGU_HANH_INFO[a.nguHanh.nameHanh].emoji} ${a.nguHanh.nameHanh}` : "—";
                     else value = (a as unknown as Record<string, number>)[row.key] ?? "—";
-                    return <td key={n.fullName} className="text-center py-2 px-3 font-bold text-[#333]">{value}</td>;
+                    return <td key={n.fullName} className="text-center py-2 px-2 md:px-3 font-bold text-[#333] text-xs md:text-sm">{value}</td>;
                   })}
                 </tr>
               ))}
               <tr>
-                <td className="py-2 px-3 text-[#888] font-semibold">Y nghia</td>
+                <td className="py-2 px-2 md:px-3 text-[#888] font-semibold text-xs md:text-sm">Ý nghĩa</td>
                 {names.map((n) => (
-                  <td key={n.fullName} className="text-center py-2 px-3 text-xs text-[#666]">{n.meaning}</td>
+                  <td key={n.fullName} className="text-center py-2 px-2 md:px-3 text-xs text-[#666]">{n.meaning}</td>
                 ))}
               </tr>
             </tbody>
@@ -643,7 +643,7 @@ function CompareModal({ names, onClose }: { names: NameSuggestion[]; onClose: ()
 }
 
 // ============================================================================
-// Tab: Phan tich ten co san
+// Tab: Phân tích tên có sẵn
 // ============================================================================
 
 function AnalyzeTab() {
@@ -677,35 +677,35 @@ function AnalyzeTab() {
 
   return (
     <div>
-      <div className="result-card p-6 mb-8">
-        <h2 className="text-lg font-bold text-[#af3689] mb-4 flex items-center gap-2">
+      <div className="result-card p-4 md:p-6 mb-6 md:mb-8">
+        <h2 className="text-base md:text-lg font-bold text-[#af3689] mb-4 flex items-center gap-2">
           <span className="w-1 h-6 bg-[#af3689] rounded-full"></span>
-          Phan tich ten day du
+          Phân tích tên đầy đủ
         </h2>
-        <p className="text-xs text-[#888] mb-4">Nhap ten va ngay sinh de xem day du 6 chi so than so hoc + ngu hanh.</p>
+        <p className="text-xs text-[#888] mb-4">Nhập tên và ngày sinh để xem đầy đủ 6 chỉ số thần số học + ngũ hành.</p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
           <div>
-            <label className="block text-sm font-semibold text-[#555] mb-1.5">Ho va ten <span className="text-red-500">*</span></label>
-            <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="Nguyen Van An" className="input-field w-full" />
+            <label className="block text-sm font-semibold text-[#555] mb-1.5">Họ và tên <span className="text-red-500">*</span></label>
+            <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="Nguyễn Văn An" className="input-field w-full" />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-[#555] mb-1.5">Ngay sinh <span className="text-red-500">*</span></label>
+            <label className="block text-sm font-semibold text-[#555] mb-1.5">Ngày sinh <span className="text-red-500">*</span></label>
             <input type="date" value={birthDate} onChange={(e) => setBirthDate(e.target.value)} className="input-field w-full" />
           </div>
         </div>
 
-        <button onClick={handleAnalyze} disabled={!fullName.trim() || !birthDate} className="btn-primary mt-5 w-full py-3.5 text-sm uppercase tracking-wider">
-          Phan tich
+        <button onClick={handleAnalyze} disabled={!fullName.trim() || !birthDate} className="btn-primary mt-4 md:mt-5 w-full py-3 md:py-3.5 text-sm uppercase tracking-wider">
+          Phân tích
         </button>
       </div>
 
       {result && (
-        <div className="result-card p-6">
+        <div className="result-card p-4 md:p-6">
           <div className="flex items-center gap-3 mb-4">
-            <span className="number-badge w-14 h-14 text-2xl">{result.expression}</span>
+            <span className="number-badge w-12 h-12 md:w-14 md:h-14 text-xl md:text-2xl">{result.expression}</span>
             <div>
-              <h2 className="text-xl font-bold text-[#333]">{result.originalName}</h2>
+              <h2 className="text-lg md:text-xl font-bold text-[#333]">{result.originalName}</h2>
               <p className="text-xs text-[#999]">{result.normalizedName} — {result.birthDate}</p>
             </div>
           </div>
@@ -718,7 +718,7 @@ function AnalyzeTab() {
 }
 
 // ============================================================================
-// Tab: Biet danh
+// Tab: Biệt danh
 // ============================================================================
 
 function NicknameTab() {
@@ -751,59 +751,59 @@ function NicknameTab() {
   }
 
   const CATEGORY_LABELS: Record<string, string> = {
-    cute: "De thuong", animal: "Dong vat", fruit: "Trai cay", nature: "Thien nhien", english: "Tieng Anh", other: "Khac",
+    cute: "Dễ thương", animal: "Động vật", fruit: "Trái cây", nature: "Thiên nhiên", english: "Tiếng Anh", other: "Khác",
   };
 
   return (
     <div>
-      <div className="flex gap-2 mb-6">
-        <button onClick={() => setMode("suggest")} className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${mode === "suggest" ? "bg-[#af3689] text-white shadow" : "bg-white text-[#af3689] border border-[#e8dff0] hover:bg-[#faf5fc]"}`}>
-          Goi y biet danh
+      <div className="flex gap-2 mb-5 md:mb-6">
+        <button onClick={() => setMode("suggest")} className={`flex-1 md:flex-none px-3 md:px-4 py-2 rounded-lg text-sm font-bold transition-all ${mode === "suggest" ? "bg-[#af3689] text-white shadow" : "bg-white text-[#af3689] border border-[#e8dff0] hover:bg-[#faf5fc]"}`}>
+          Gợi ý biệt danh
         </button>
-        <button onClick={() => setMode("analyze")} className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${mode === "analyze" ? "bg-[#af3689] text-white shadow" : "bg-white text-[#af3689] border border-[#e8dff0] hover:bg-[#faf5fc]"}`}>
-          Phan tich biet danh
+        <button onClick={() => setMode("analyze")} className={`flex-1 md:flex-none px-3 md:px-4 py-2 rounded-lg text-sm font-bold transition-all ${mode === "analyze" ? "bg-[#af3689] text-white shadow" : "bg-white text-[#af3689] border border-[#e8dff0] hover:bg-[#faf5fc]"}`}>
+          Phân tích biệt danh
         </button>
       </div>
 
       {mode === "suggest" ? (
         <>
-          <div className="result-card p-6 mb-8">
-            <h2 className="text-lg font-bold text-[#af3689] mb-4 flex items-center gap-2">
+          <div className="result-card p-4 md:p-6 mb-6 md:mb-8">
+            <h2 className="text-base md:text-lg font-bold text-[#af3689] mb-4 flex items-center gap-2">
               <span className="w-1 h-6 bg-[#af3689] rounded-full"></span>
-              Goi y biet danh hop menh
+              Gợi ý biệt danh hợp mệnh
             </h2>
             <p className="text-xs text-[#888] mb-4 leading-relaxed">
-              Nhap ten khai sinh va ngay sinh, he thong se goi y nhung biet danh co nang luong hai hoa nhat.
+              Nhập tên khai sinh và ngày sinh, hệ thống sẽ gợi ý những biệt danh có năng lượng hài hòa nhất.
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
               <div>
-                <label className="block text-sm font-semibold text-[#555] mb-1.5">Ten khai sinh <span className="text-red-500">*</span></label>
-                <input type="text" value={suggestFullName} onChange={(e) => setSuggestFullName(e.target.value)} placeholder="Nguyen Van An" className="input-field w-full" />
+                <label className="block text-sm font-semibold text-[#555] mb-1.5">Tên khai sinh <span className="text-red-500">*</span></label>
+                <input type="text" value={suggestFullName} onChange={(e) => setSuggestFullName(e.target.value)} placeholder="Nguyễn Văn An" className="input-field w-full" />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-[#555] mb-1.5">Ngay sinh <span className="text-red-500">*</span></label>
+                <label className="block text-sm font-semibold text-[#555] mb-1.5">Ngày sinh <span className="text-red-500">*</span></label>
                 <input type="date" value={suggestBirthDate} onChange={(e) => setSuggestBirthDate(e.target.value)} className="input-field w-full" />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-[#555] mb-1.5">Gioi tinh</label>
+                <label className="block text-sm font-semibold text-[#555] mb-1.5">Giới tính</label>
                 <select value={suggestGender} onChange={(e) => setSuggestGender(e.target.value as "male" | "female" | "all")} className="input-field w-full">
-                  <option value="all">Tat ca</option>
+                  <option value="all">Tất cả</option>
                   <option value="male">Nam</option>
-                  <option value="female">Nu</option>
+                  <option value="female">Nữ</option>
                 </select>
               </div>
             </div>
-            <button onClick={handleSuggest} disabled={!suggestFullName.trim() || !suggestBirthDate} className="btn-primary mt-5 w-full py-3.5 text-sm uppercase tracking-wider">
-              Goi y biet danh
+            <button onClick={handleSuggest} disabled={!suggestFullName.trim() || !suggestBirthDate} className="btn-primary mt-4 md:mt-5 w-full py-3 md:py-3.5 text-sm uppercase tracking-wider">
+              Gợi ý biệt danh
             </button>
           </div>
 
           {suggestSearched && (
             <div>
-              <h2 className="text-xl font-bold text-[#555] mb-4 flex items-center gap-2">
+              <h2 className="text-lg md:text-xl font-bold text-[#555] mb-4 flex items-center gap-2">
                 <span className="w-1 h-6 bg-[#da8138] rounded-full"></span>
-                Biet danh goi y
-                <span className="text-sm font-normal text-[#999]">({suggestions.length} ket qua)</span>
+                Biệt danh gợi ý
+                <span className="text-sm font-normal text-[#999]">({suggestions.length} kết quả)</span>
               </h2>
               <div className="grid gap-3">
                 {suggestions.map((s, i) => {
@@ -811,30 +811,30 @@ function NicknameTab() {
                   const score = comp?.harmonyScore ?? 0;
                   const level = comp?.level ?? "neutral";
                   const barColor = level === "excellent" ? "#54a404" : level === "good" ? "#2196f3" : level === "neutral" ? "#da8138" : "#e60909";
-                  const levelLabel = level === "excellent" ? "Rat hop" : level === "good" ? "Hop" : level === "neutral" ? "Trung binh" : "Thu thach";
+                  const levelLabel = level === "excellent" ? "Rất hợp" : level === "good" ? "Hợp" : level === "neutral" ? "Trung bình" : "Thử thách";
                   return (
-                    <div key={i} className="result-card p-4">
-                      <div className="flex items-center gap-3">
-                        <span className="number-badge w-8 h-8 text-xs shrink-0">{i + 1}</span>
+                    <div key={i} className="result-card p-3 md:p-4">
+                      <div className="flex items-center gap-2 md:gap-3">
+                        <span className="number-badge w-7 h-7 md:w-8 md:h-8 text-xs shrink-0">{i + 1}</span>
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2">
-                            <h3 className="font-bold text-[#333] text-base">{s.nickname}</h3>
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <h3 className="font-bold text-[#333] text-sm md:text-base">{s.nickname}</h3>
                             <span className="px-2 py-0.5 bg-[#af3689]/10 text-[#af3689] text-[10px] rounded-full">{CATEGORY_LABELS[s.category] || s.category}</span>
                           </div>
                           <p className="text-xs text-[#888]">{s.meaning}</p>
                         </div>
                         <div className="text-right shrink-0">
                           <span className="text-xs font-bold" style={{ color: barColor }}>{levelLabel}</span>
-                          <div className="compat-bar w-16 mt-1">
+                          <div className="compat-bar w-14 md:w-16 mt-1">
                             <div className="compat-bar-fill" style={{ width: `${score}%`, background: barColor }} />
                           </div>
                         </div>
                       </div>
-                      <div className="flex gap-4 mt-3 pt-3 border-t border-[#f0e8f5]">
+                      <div className="flex gap-3 md:gap-4 mt-3 pt-3 border-t border-[#f0e8f5]">
                         {[
-                          { label: "The hien", value: s.analysis.minorExpression, color: "#af3689" },
-                          { label: "Linh hon", value: s.analysis.minorSoulUrge, color: "#da8138" },
-                          { label: "Nhan cach", value: s.analysis.minorPersonality, color: "#2196f3" },
+                          { label: "Thể hiện", value: s.analysis.minorExpression, color: "#af3689" },
+                          { label: "Linh hồn", value: s.analysis.minorSoulUrge, color: "#da8138" },
+                          { label: "Nhân cách", value: s.analysis.minorPersonality, color: "#2196f3" },
                         ].map((idx) => (
                           <div key={idx.label} className="flex items-center gap-1.5">
                             <span className="number-badge w-6 h-6 text-[10px]" style={{ background: `linear-gradient(135deg, ${idx.color}, ${idx.color}cc)` }}>{idx.value}</span>
@@ -851,60 +851,60 @@ function NicknameTab() {
         </>
       ) : (
         <>
-          <div className="result-card p-6 mb-8">
-            <h2 className="text-lg font-bold text-[#af3689] mb-4 flex items-center gap-2">
+          <div className="result-card p-4 md:p-6 mb-6 md:mb-8">
+            <h2 className="text-base md:text-lg font-bold text-[#af3689] mb-4 flex items-center gap-2">
               <span className="w-1 h-6 bg-[#af3689] rounded-full"></span>
-              Phan tich biet danh
+              Phân tích biệt danh
             </h2>
             <p className="text-xs text-[#888] mb-4 leading-relaxed">
-              Biet danh anh huong den <strong>Minor Expression</strong> (cach the hien hang ngay) va <strong>Minor Soul Urge</strong> (mong muon tiem an khi duoc goi ten).
+              Biệt danh ảnh hưởng đến <strong>Minor Expression</strong> (cách thể hiện hàng ngày) và <strong>Minor Soul Urge</strong> (mong muốn tiềm ẩn khi được gọi tên).
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
               <div>
-                <label className="block text-sm font-semibold text-[#555] mb-1.5">Biet danh <span className="text-red-500">*</span></label>
-                <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value)} placeholder="VD: Bong, Bin, Kuro..." className="input-field w-full" />
+                <label className="block text-sm font-semibold text-[#555] mb-1.5">Biệt danh <span className="text-red-500">*</span></label>
+                <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value)} placeholder="VD: Bông, Bin, Kuro..." className="input-field w-full" />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-[#555] mb-1.5">Ten khai sinh</label>
-                <input type="text" value={analyzeFullNameVal} onChange={(e) => setAnalyzeFullNameVal(e.target.value)} placeholder="De so sanh (tuy chon)" className="input-field w-full" />
+                <label className="block text-sm font-semibold text-[#555] mb-1.5">Tên khai sinh</label>
+                <input type="text" value={analyzeFullNameVal} onChange={(e) => setAnalyzeFullNameVal(e.target.value)} placeholder="Để so sánh (tùy chọn)" className="input-field w-full" />
               </div>
             </div>
             {analyzeFullNameVal.trim() && (
-              <div className="mt-4">
-                <label className="block text-sm font-semibold text-[#555] mb-1.5">Ngay sinh</label>
+              <div className="mt-3 md:mt-4">
+                <label className="block text-sm font-semibold text-[#555] mb-1.5">Ngày sinh</label>
                 <input type="date" value={analyzeBirthDate} onChange={(e) => setAnalyzeBirthDate(e.target.value)} className="input-field w-full md:w-1/2" />
               </div>
             )}
-            <button onClick={handleAnalyze} disabled={!nickname.trim()} className="btn-primary mt-5 w-full py-3.5 text-sm uppercase tracking-wider">
-              Phan tich biet danh
+            <button onClick={handleAnalyze} disabled={!nickname.trim()} className="btn-primary mt-4 md:mt-5 w-full py-3 md:py-3.5 text-sm uppercase tracking-wider">
+              Phân tích biệt danh
             </button>
           </div>
 
           {result && (
-            <div className="result-card p-6">
+            <div className="result-card p-4 md:p-6">
               <div className="flex items-center gap-3 mb-4">
-                <span className="number-badge w-14 h-14 text-2xl">{result.minorExpression}</span>
+                <span className="number-badge w-12 h-12 md:w-14 md:h-14 text-xl md:text-2xl">{result.minorExpression}</span>
                 <div>
-                  <h2 className="text-xl font-bold text-[#333]">{result.nickname}</h2>
+                  <h2 className="text-lg md:text-xl font-bold text-[#333]">{result.nickname}</h2>
                   <p className="text-xs text-[#999]">{result.normalizedNickname}</p>
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-3 mb-5">
+              <div className="grid grid-cols-3 gap-2 md:gap-3 mb-5">
                 {[
-                  { label: "Minor Expression", sub: "The hien", value: result.minorExpression, color: "#af3689" },
-                  { label: "Minor Soul Urge", sub: "Linh hon", value: result.minorSoulUrge, color: "#da8138" },
-                  { label: "Minor Personality", sub: "Nhan cach", value: result.minorPersonality, color: "#2196f3" },
+                  { label: "Minor Expression", sub: "Thể hiện", value: result.minorExpression, color: "#af3689" },
+                  { label: "Minor Soul Urge", sub: "Linh hồn", value: result.minorSoulUrge, color: "#da8138" },
+                  { label: "Minor Personality", sub: "Nhân cách", value: result.minorPersonality, color: "#2196f3" },
                 ].map((idx) => {
                   const meaning = getMeaning(idx.value);
                   return (
-                    <div key={idx.label} className="p-3 rounded-lg border border-[#e8dff0] bg-white hover:shadow-md transition-shadow">
-                      <p className="text-[10px] text-[#999] uppercase tracking-wider mb-1">{idx.sub}</p>
-                      <div className="flex items-center gap-2">
-                        <span className="number-badge w-10 h-10 text-base" style={{ background: `linear-gradient(135deg, ${idx.color}, ${idx.color}cc)` }}>{idx.value}</span>
+                    <div key={idx.label} className="p-2 md:p-3 rounded-lg border border-[#e8dff0] bg-white hover:shadow-md transition-shadow">
+                      <p className="text-[9px] md:text-[10px] text-[#999] uppercase tracking-wider mb-1">{idx.sub}</p>
+                      <div className="flex items-center gap-1.5 md:gap-2">
+                        <span className="number-badge w-8 h-8 md:w-10 md:h-10 text-sm md:text-base shrink-0" style={{ background: `linear-gradient(135deg, ${idx.color}, ${idx.color}cc)` }}>{idx.value}</span>
                         <div className="min-w-0">
-                          <p className="text-xs font-semibold text-[#333] truncate">{meaning.name}</p>
-                          <p className="text-[10px] text-[#aaa]">{idx.label}</p>
+                          <p className="text-[10px] md:text-xs font-semibold text-[#333] truncate">{meaning.name}</p>
+                          <p className="text-[9px] md:text-[10px] text-[#aaa] hidden md:block">{idx.label}</p>
                         </div>
                       </div>
                     </div>
@@ -912,10 +912,10 @@ function NicknameTab() {
                 })}
               </div>
 
-              <div className="p-4 rounded-lg border-l-4 border-[#af3689] bg-gradient-to-r from-[#faf5fc] to-white mb-5">
+              <div className="p-3 md:p-4 rounded-lg border-l-4 border-[#af3689] bg-gradient-to-r from-[#faf5fc] to-white mb-5">
                 <h4 className="font-bold text-[#af3689] text-sm mb-1">Minor Expression {result.minorExpression} — {getMeaning(result.minorExpression).name}</h4>
                 <p className="text-xs text-[#666] leading-relaxed">
-                  Khi duoc goi bang biet danh &ldquo;{result.nickname}&rdquo;, nang luong so {result.minorExpression} anh huong den cach be the hien hang ngay: {getMeaning(result.minorExpression).description.toLowerCase()}
+                  Khi được gọi bằng biệt danh &ldquo;{result.nickname}&rdquo;, năng lượng số {result.minorExpression} ảnh hưởng đến cách bé thể hiện hàng ngày: {getMeaning(result.minorExpression).description.toLowerCase()}
                 </p>
               </div>
 
@@ -923,11 +923,11 @@ function NicknameTab() {
                 <div className="space-y-4">
                   <h4 className="text-sm font-bold text-[#555] flex items-center gap-2">
                     <span className="w-1 h-5 bg-[#da8138] rounded-full"></span>
-                    So sanh voi ten khai sinh
+                    So sánh với tên khai sinh
                   </h4>
-                  <div className="p-4 rounded-lg bg-gradient-to-r from-[#faf5fc] to-[#f5f0fa] border border-[#e8dff0]">
+                  <div className="p-3 md:p-4 rounded-lg bg-gradient-to-r from-[#faf5fc] to-[#f5f0fa] border border-[#e8dff0]">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-bold text-[#555]">Muc hai hoa</span>
+                      <span className="text-sm font-bold text-[#555]">Mức hài hòa</span>
                       <span className="text-sm font-bold" style={{
                         color: result.comparison.level === "excellent" ? "#54a404" : result.comparison.level === "good" ? "#2196f3" : result.comparison.level === "neutral" ? "#da8138" : "#e60909"
                       }}>{result.comparison.harmonyScore}%</span>
@@ -940,15 +940,15 @@ function NicknameTab() {
                     </div>
                     <p className="text-xs text-[#777] mt-2 leading-relaxed">{result.comparison.description}</p>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <div className="grid grid-cols-3 gap-2 md:gap-3">
                     {[
                       { label: "Expression", match: result.comparison.expressionMatch },
                       { label: "Soul Urge", match: result.comparison.soulUrgeMatch },
                       { label: "Personality", match: result.comparison.personalityMatch },
                     ].map((pair) => (
-                      <div key={pair.label} className={`p-3 rounded-lg border text-center ${pair.match ? "border-[#54a404]/30 bg-[#54a404]/5" : "border-[#e8dff0] bg-white"}`}>
-                        <p className="text-[10px] text-[#999] uppercase tracking-wider mb-1">{pair.label}</p>
-                        <span className={`text-sm font-bold ${pair.match ? "text-[#54a404]" : "text-[#da8138]"}`}>{pair.match ? "Cung nhom" : "Khac nhom"}</span>
+                      <div key={pair.label} className={`p-2 md:p-3 rounded-lg border text-center ${pair.match ? "border-[#54a404]/30 bg-[#54a404]/5" : "border-[#e8dff0] bg-white"}`}>
+                        <p className="text-[9px] md:text-[10px] text-[#999] uppercase tracking-wider mb-1">{pair.label}</p>
+                        <span className={`text-xs md:text-sm font-bold ${pair.match ? "text-[#54a404]" : "text-[#da8138]"}`}>{pair.match ? "Cùng nhóm" : "Khác nhóm"}</span>
                       </div>
                     ))}
                   </div>
@@ -959,14 +959,14 @@ function NicknameTab() {
                 <div className="mt-5">
                   <h4 className="text-sm font-bold text-[#555] mb-3 flex items-center gap-2">
                     <span className="w-1 h-5 bg-[#da8138] rounded-full"></span>
-                    Chi tiet quy doi
+                    Chi tiết quy đổi
                   </h4>
-                  <div className="flex flex-wrap gap-1.5">
+                  <div className="flex flex-wrap gap-1 md:gap-1.5">
                     {result.letterBreakdown.map((l, i) => (
-                      <div key={i} className={`w-11 h-16 rounded-lg flex flex-col items-center justify-center border-2 transition-transform hover:scale-110 ${l.type === "vowel" ? "bg-[#af3689]/5 border-[#af3689]/30 text-[#af3689]" : "bg-[#2196f3]/5 border-[#2196f3]/30 text-[#2196f3]"}`}>
-                        <span className="font-bold text-base">{l.letter}</span>
+                      <div key={i} className={`w-9 h-14 md:w-11 md:h-16 rounded-lg flex flex-col items-center justify-center border-2 transition-transform hover:scale-110 ${l.type === "vowel" ? "bg-[#af3689]/5 border-[#af3689]/30 text-[#af3689]" : "bg-[#2196f3]/5 border-[#2196f3]/30 text-[#2196f3]"}`}>
+                        <span className="font-bold text-sm md:text-base">{l.letter}</span>
                         <span className="text-xs opacity-70">{l.value}</span>
-                        <span className="text-[8px] opacity-50 uppercase">{l.type === "vowel" ? "ngam" : "phu"}</span>
+                        <span className="text-[7px] md:text-[8px] opacity-50 uppercase">{l.type === "vowel" ? "nguyên" : "phụ"}</span>
                       </div>
                     ))}
                   </div>
@@ -981,7 +981,7 @@ function NicknameTab() {
 }
 
 // ============================================================================
-// Tab: Da luu (Favorites)
+// Tab: Đã lưu (Favorites)
 // ============================================================================
 
 function FavoritesTab() {
@@ -1000,27 +1000,27 @@ function FavoritesTab() {
   if (favorites.length === 0) {
     return (
       <div className="result-card p-8 text-center">
-        <p className="text-[#999] text-lg mb-2">Chua co ten yeu thich nao</p>
-        <p className="text-xs text-[#bbb]">Nhan nut ♡ tren ket qua goi y de luu ten yeu thich tai day.</p>
+        <p className="text-[#999] text-lg mb-2">Chưa có tên yêu thích nào</p>
+        <p className="text-xs text-[#bbb]">Nhấn nút ♡ trên kết quả gợi ý để lưu tên yêu thích tại đây.</p>
       </div>
     );
   }
 
   return (
     <div>
-      <h2 className="text-xl font-bold text-[#555] mb-4 flex items-center gap-2">
+      <h2 className="text-lg md:text-xl font-bold text-[#555] mb-4 flex items-center gap-2">
         <span className="w-1 h-6 bg-[#af3689] rounded-full"></span>
-        Ten yeu thich
+        Tên yêu thích
         <span className="text-sm font-normal text-[#999]">({favorites.length})</span>
       </h2>
 
       <div className="grid gap-3">
         {favorites.map((fav, i) => {
           const levelConfig: Record<string, { text: string; label: string }> = {
-            excellent: { text: "text-[#54a404]", label: "Rat hop" },
-            good: { text: "text-[#2196f3]", label: "Hop" },
-            neutral: { text: "text-[#da8138]", label: "Trung binh" },
-            challenging: { text: "text-[#e60909]", label: "Thu thach" },
+            excellent: { text: "text-[#54a404]", label: "Rất hợp" },
+            good: { text: "text-[#2196f3]", label: "Hợp" },
+            neutral: { text: "text-[#da8138]", label: "Trung bình" },
+            challenging: { text: "text-[#e60909]", label: "Thử thách" },
           };
           const cfg = levelConfig[fav.level] || levelConfig.neutral;
           const barColor = fav.level === "excellent" ? "#54a404" : fav.level === "good" ? "#2196f3" : fav.level === "neutral" ? "#da8138" : "#e60909";
@@ -1028,20 +1028,20 @@ function FavoritesTab() {
 
           return (
             <div key={`${fav.fullName}-${fav.birthDate}`} className="result-card overflow-hidden">
-              <div className="p-4 cursor-pointer hover:bg-[#faf5fc] transition-colors" onClick={() => setExpandedIdx(isExpanded ? null : i)}>
-                <div className="flex items-center gap-3">
+              <div className="p-3 md:p-4 cursor-pointer hover:bg-[#faf5fc] transition-colors" onClick={() => setExpandedIdx(isExpanded ? null : i)}>
+                <div className="flex items-center gap-2 md:gap-3">
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-[#333] text-base truncate">{fav.fullName}</h3>
+                    <h3 className="font-bold text-[#333] text-sm md:text-base truncate">{fav.fullName}</h3>
                     <p className="text-xs text-[#888]">{fav.birthDate}</p>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
                     <div className="text-right">
                       <span className={`text-xs font-bold ${cfg.text}`}>{cfg.label}</span>
-                      <div className="compat-bar w-16 mt-1">
+                      <div className="compat-bar w-14 md:w-16 mt-1">
                         <div className="compat-bar-fill" style={{ width: `${fav.score}%`, background: barColor }} />
                       </div>
                     </div>
-                    <button onClick={(e) => { e.stopPropagation(); handleRemove(fav.fullName, fav.birthDate); }} className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-red-50 text-red-400 hover:text-red-500" title="Xoa">
+                    <button onClick={(e) => { e.stopPropagation(); handleRemove(fav.fullName, fav.birthDate); }} className="w-7 h-7 md:w-8 md:h-8 flex items-center justify-center rounded-full hover:bg-red-50 text-red-400 hover:text-red-500" title="Xóa">
                       &times;
                     </button>
                     <span className="text-[#bbb] text-xs">{isExpanded ? "▲" : "▼"}</span>
@@ -1049,7 +1049,7 @@ function FavoritesTab() {
                 </div>
               </div>
               {isExpanded && (
-                <div className="px-4 pb-4 border-t border-[#f0e8f5]">
+                <div className="px-3 md:px-4 pb-4 border-t border-[#f0e8f5]">
                   <FavoriteDetail fullName={fav.fullName} birthDate={fav.birthDate} />
                 </div>
               )}
@@ -1090,13 +1090,13 @@ function ShareButton({ name, birthDate }: { name: string; birthDate: string }) {
 
   return (
     <button onClick={handleCopy} className="w-full mt-4 py-2.5 px-4 rounded-lg border border-[#e8dff0] bg-white hover:bg-[#faf5fc] transition-colors text-sm text-[#af3689] font-medium flex items-center justify-center gap-2">
-      {copied ? "Da copy link!" : "Chia se ket qua"}
+      {copied ? "Đã copy link!" : "Chia sẻ kết quả"}
     </button>
   );
 }
 
 // ============================================================================
-// Component: Chi tiet phan tich
+// Component: Chi tiết phân tích
 // ============================================================================
 
 function AnalysisDetail({
@@ -1109,22 +1109,22 @@ function AnalysisDetail({
   showNguHanh?: boolean;
 }) {
   const indices = [
-    { label: "Duong Doi", value: result.lifePath, sub: "Life Path", color: "#af3689" },
-    { label: "Su Menh", value: result.expression, sub: "Expression", color: "#8a2b6d" },
-    { label: "Linh Hon", value: result.soulUrge, sub: "Soul Urge", color: "#da8138" },
-    { label: "Nhan Cach", value: result.personality, sub: "Personality", color: "#2196f3" },
-    { label: "Truong Thanh", value: result.maturity, sub: "Maturity", color: "#54a404" },
-    { label: "Ngay Sinh", value: result.birthday, sub: "Birthday", color: "#9c27b0" },
+    { label: "Đường Đời", value: result.lifePath, sub: "Life Path", color: "#af3689" },
+    { label: "Sứ Mệnh", value: result.expression, sub: "Expression", color: "#8a2b6d" },
+    { label: "Linh Hồn", value: result.soulUrge, sub: "Soul Urge", color: "#da8138" },
+    { label: "Nhân Cách", value: result.personality, sub: "Personality", color: "#2196f3" },
+    { label: "Trưởng Thành", value: result.maturity, sub: "Maturity", color: "#54a404" },
+    { label: "Ngày Sinh", value: result.birthday, sub: "Birthday", color: "#9c27b0" },
   ];
 
   const compatColor = result.compatibility.level === "excellent" ? "#54a404" : result.compatibility.level === "good" ? "#2196f3" : result.compatibility.level === "neutral" ? "#da8138" : "#e60909";
 
   return (
-    <div className="space-y-5 pt-3">
+    <div className="space-y-4 md:space-y-5 pt-3">
       {/* Compatibility */}
-      <div className="p-4 rounded-lg bg-gradient-to-r from-[#faf5fc] to-[#f5f0fa] border border-[#e8dff0]">
+      <div className="p-3 md:p-4 rounded-lg bg-gradient-to-r from-[#faf5fc] to-[#f5f0fa] border border-[#e8dff0]">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-bold text-[#555]">Muc tuong hop</span>
+          <span className="text-sm font-bold text-[#555]">Mức tương hợp</span>
           <span className="text-sm font-bold" style={{ color: compatColor }}>{result.compatibility.score}%</span>
         </div>
         <div className="compat-bar">
@@ -1133,24 +1133,24 @@ function AnalysisDetail({
         <p className="text-xs text-[#777] mt-2 leading-relaxed">{result.compatibility.description}</p>
       </div>
 
-      {/* Ngu Hanh */}
+      {/* Ngũ Hành */}
       {showNguHanh && result.nguHanh && (
-        <div className="p-4 rounded-lg border border-[#e8dff0] bg-white">
+        <div className="p-3 md:p-4 rounded-lg border border-[#e8dff0] bg-white">
           <h4 className="text-sm font-bold text-[#555] mb-3 flex items-center gap-2">
             <span className="w-1 h-5 bg-[#da8138] rounded-full"></span>
-            Ngu Hanh
+            Ngũ Hành
           </h4>
-          <div className="grid grid-cols-2 gap-3 mb-3">
-            <div className="p-3 rounded-lg border border-[#e8dff0] text-center">
-              <p className="text-[10px] text-[#999] uppercase tracking-wider mb-1">Menh nam sinh</p>
+          <div className="grid grid-cols-2 gap-2 md:gap-3 mb-3">
+            <div className="p-2 md:p-3 rounded-lg border border-[#e8dff0] text-center">
+              <p className="text-[10px] text-[#999] uppercase tracking-wider mb-1">Mệnh năm sinh</p>
               <span className="text-2xl">{NGU_HANH_INFO[result.nguHanh.yearHanh].emoji}</span>
               <p className="text-sm font-bold mt-1" style={{ color: NGU_HANH_INFO[result.nguHanh.yearHanh].color }}>
                 {result.nguHanh.canChi.can} {result.nguHanh.canChi.chi}
               </p>
               <p className="text-[10px] text-[#888]">{result.nguHanh.yearHanh} — {result.nguHanh.canChi.amDuong}</p>
             </div>
-            <div className="p-3 rounded-lg border border-[#e8dff0] text-center">
-              <p className="text-[10px] text-[#999] uppercase tracking-wider mb-1">Menh ten</p>
+            <div className="p-2 md:p-3 rounded-lg border border-[#e8dff0] text-center">
+              <p className="text-[10px] text-[#999] uppercase tracking-wider mb-1">Mệnh tên</p>
               <span className="text-2xl">{NGU_HANH_INFO[result.nguHanh.nameHanh].emoji}</span>
               <p className="text-sm font-bold mt-1" style={{ color: NGU_HANH_INFO[result.nguHanh.nameHanh].color }}>
                 {result.nguHanh.nameHanh}
@@ -1168,18 +1168,18 @@ function AnalysisDetail({
         </div>
       )}
 
-      {/* Chi so grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+      {/* Chỉ số grid */}
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3">
         {indices.map((idx) => {
           const meaning = getMeaning(idx.value);
           return (
-            <div key={idx.label} className="p-3 rounded-lg border border-[#e8dff0] bg-white hover:shadow-md transition-shadow">
-              <p className="text-[10px] text-[#999] uppercase tracking-wider mb-1">{idx.label}</p>
-              <div className="flex items-center gap-2">
-                <span className="number-badge w-10 h-10 text-base" style={{ background: `linear-gradient(135deg, ${idx.color}, ${idx.color}cc)` }}>{idx.value}</span>
+            <div key={idx.label} className="p-2 md:p-3 rounded-lg border border-[#e8dff0] bg-white hover:shadow-md transition-shadow">
+              <p className="text-[9px] md:text-[10px] text-[#999] uppercase tracking-wider mb-1">{idx.label}</p>
+              <div className="flex items-center gap-1.5 md:gap-2">
+                <span className="number-badge w-8 h-8 md:w-10 md:h-10 text-sm md:text-base shrink-0" style={{ background: `linear-gradient(135deg, ${idx.color}, ${idx.color}cc)` }}>{idx.value}</span>
                 <div className="min-w-0">
-                  <p className="text-xs font-semibold text-[#333] truncate">{meaning.name}</p>
-                  <p className="text-[10px] text-[#aaa]">{idx.sub}</p>
+                  <p className="text-[10px] md:text-xs font-semibold text-[#333] truncate">{meaning.name}</p>
+                  <p className="text-[9px] md:text-[10px] text-[#aaa]">{idx.sub}</p>
                 </div>
               </div>
             </div>
@@ -1187,13 +1187,13 @@ function AnalysisDetail({
         })}
       </div>
 
-      {/* Y nghia so su menh */}
-      <div className="p-4 rounded-lg border-l-4 border-[#af3689] bg-gradient-to-r from-[#faf5fc] to-white">
-        <h4 className="font-bold text-[#af3689] text-sm mb-1">So Su Menh {result.expression} — {getMeaning(result.expression).name}</h4>
+      {/* Ý nghĩa số sứ mệnh */}
+      <div className="p-3 md:p-4 rounded-lg border-l-4 border-[#af3689] bg-gradient-to-r from-[#faf5fc] to-white">
+        <h4 className="font-bold text-[#af3689] text-sm mb-1">Số Sứ Mệnh {result.expression} — {getMeaning(result.expression).name}</h4>
         <p className="text-xs text-[#666] leading-relaxed mb-3">{getMeaning(result.expression).description}</p>
         <div className="space-y-2">
           <div>
-            <p className="text-[10px] text-[#54a404] font-semibold mb-1">Diem manh</p>
+            <p className="text-[10px] text-[#54a404] font-semibold mb-1">Điểm mạnh</p>
             <div className="flex flex-wrap gap-1">
               {getMeaning(result.expression).strengths.map((s) => (
                 <span key={s} className="px-2 py-0.5 bg-[#54a404]/10 text-[#54a404] text-[10px] rounded-full border border-[#54a404]/20">{s}</span>
@@ -1201,7 +1201,7 @@ function AnalysisDetail({
             </div>
           </div>
           <div>
-            <p className="text-[10px] text-[#e60909] font-semibold mb-1">Thu thach</p>
+            <p className="text-[10px] text-[#e60909] font-semibold mb-1">Thử thách</p>
             <div className="flex flex-wrap gap-1">
               {getMeaning(result.expression).challenges.map((c) => (
                 <span key={c} className="px-2 py-0.5 bg-[#e60909]/10 text-[#e60909] text-[10px] rounded-full border border-[#e60909]/20">{c}</span>
@@ -1216,25 +1216,25 @@ function AnalysisDetail({
         <div>
           <h4 className="text-sm font-bold text-[#555] mb-3 flex items-center gap-2">
             <span className="w-1 h-5 bg-[#da8138] rounded-full"></span>
-            Chi tiet quy doi chu cai
+            Chi tiết quy đổi chữ cái
           </h4>
-          <div className="flex flex-wrap gap-1.5">
+          <div className="flex flex-wrap gap-1 md:gap-1.5">
             {result.letterBreakdown.map((l, i) => (
-              <div key={i} className={`w-11 h-16 rounded-lg flex flex-col items-center justify-center border-2 transition-transform hover:scale-110 ${l.type === "vowel" ? "bg-[#af3689]/5 border-[#af3689]/30 text-[#af3689]" : "bg-[#2196f3]/5 border-[#2196f3]/30 text-[#2196f3]"}`}>
-                <span className="font-bold text-base">{l.letter}</span>
+              <div key={i} className={`w-9 h-14 md:w-11 md:h-16 rounded-lg flex flex-col items-center justify-center border-2 transition-transform hover:scale-110 ${l.type === "vowel" ? "bg-[#af3689]/5 border-[#af3689]/30 text-[#af3689]" : "bg-[#2196f3]/5 border-[#2196f3]/30 text-[#2196f3]"}`}>
+                <span className="font-bold text-sm md:text-base">{l.letter}</span>
                 <span className="text-xs opacity-70">{l.value}</span>
-                <span className="text-[8px] opacity-50 uppercase">{l.type === "vowel" ? "ngam" : "phu"}</span>
+                <span className="text-[7px] md:text-[8px] opacity-50 uppercase">{l.type === "vowel" ? "nguyên" : "phụ"}</span>
               </div>
             ))}
           </div>
           <div className="flex gap-4 mt-2 text-[10px] text-[#999]">
             <span className="flex items-center gap-1.5">
               <span className="w-3 h-3 rounded border-2 border-[#af3689]/30 bg-[#af3689]/5"></span>
-              Nguyen am &rarr; Linh Hon
+              Nguyên âm &rarr; Linh Hồn
             </span>
             <span className="flex items-center gap-1.5">
               <span className="w-3 h-3 rounded border-2 border-[#2196f3]/30 bg-[#2196f3]/5"></span>
-              Phu am &rarr; Nhan Cach
+              Phụ âm &rarr; Nhân Cách
             </span>
           </div>
         </div>
