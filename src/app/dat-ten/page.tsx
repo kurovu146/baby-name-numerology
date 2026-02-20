@@ -34,7 +34,7 @@ export default function Home() {
   // Fetch stats
   useEffect(() => {
     fetch("/api/stats").then((r) => r.json()).then((d) => {
-      if (d.totalSearches > 0) setTotalSearches(d.totalSearches);
+      setTotalSearches(d.totalSearches ?? 0);
     }).catch(() => {});
   }, []);
 
