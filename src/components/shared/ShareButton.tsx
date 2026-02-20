@@ -22,7 +22,7 @@ export default function ShareButton({
   const [feedback, setFeedback] = useState<"copied" | "shared" | null>(null);
 
   function buildUrl(): string {
-    const url = new URL(window.location.origin);
+    const url = new URL("/dat-ten", window.location.origin);
     if (mode === "nickname" && nickname) {
       url.searchParams.set("tab", "nickname");
       url.searchParams.set("mode", "analyze");
