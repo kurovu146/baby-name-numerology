@@ -5,8 +5,8 @@ import type { NameSuggestion } from "@/lib/suggest";
 
 export default function CompareModal({ names, onClose }: { names: NameSuggestion[]; onClose: () => void }) {
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-3 md:p-4" onClick={onClose}>
-      <div className="bg-white rounded-xl max-w-5xl w-full max-h-[90vh] md:max-h-[85vh] overflow-auto p-4 md:p-6" onClick={(e) => e.stopPropagation()}>
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-3 md:p-4 animate-fade-in" onClick={onClose}>
+      <div className="bg-white rounded-xl max-w-5xl w-full max-h-[90vh] md:max-h-[85vh] overflow-auto p-4 md:p-6 animate-slide-up" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-4 md:mb-6">
           <h2 className="text-lg md:text-xl font-bold text-[#af3689]">So sánh tên</h2>
           <button onClick={onClose} className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#f0e8f5] text-[#999] text-xl">&times;</button>

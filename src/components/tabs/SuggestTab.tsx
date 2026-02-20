@@ -31,6 +31,7 @@ export default function SuggestTab() {
   const compareBarRef = useRef<HTMLDivElement>(null);
   const [results, setResults] = useState<NameSuggestion[]>([]);
   const [searched, setSearched] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // Filter & Sort state
   const [minScore, setMinScore] = useState(0);
@@ -88,33 +89,36 @@ export default function SuggestTab() {
   }, [birthDate]);
 
   function handleSearch() {
-    if (!lastName.trim() || !birthDate) return;
-    const parts = birthDate.split("-");
-    const formatted = `${parts[2]}/${parts[1]}/${parts[0]}`;
-    const suggestions = suggestNames({
-      lastName: lastName.trim(),
-      birthDate: formatted,
-      gender,
-      middleName: middleName.trim() || undefined,
-      middleName2: middleName2.trim() || undefined,
-      excludeNames: excludeList.length > 0 ? excludeList : undefined,
-      limit: 50,
-      parentInfo: withParents ? {
-        dadName: parentInfo.dadName.trim() || undefined,
-        dadBirth: parentInfo.dadBirth || undefined,
-        momName: parentInfo.momName.trim() || undefined,
-        momBirth: parentInfo.momBirth || undefined,
-      } : undefined,
-    });
-    setResults(suggestions);
-    setSearched(true);
-    trackEvent("search_suggest", { gender });
-    setCompareList([]);
-    setShowCompare(false);
-    // Auto scroll xuống kết quả
+    if (!lastName.trim() || !birthDate || loading) return;
+    setLoading(true);
     setTimeout(() => {
-      resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 100);
+      const parts = birthDate.split("-");
+      const formatted = `${parts[2]}/${parts[1]}/${parts[0]}`;
+      const suggestions = suggestNames({
+        lastName: lastName.trim(),
+        birthDate: formatted,
+        gender,
+        middleName: middleName.trim() || undefined,
+        middleName2: middleName2.trim() || undefined,
+        excludeNames: excludeList.length > 0 ? excludeList : undefined,
+        limit: 50,
+        parentInfo: withParents ? {
+          dadName: parentInfo.dadName.trim() || undefined,
+          dadBirth: parentInfo.dadBirth || undefined,
+          momName: parentInfo.momName.trim() || undefined,
+          momBirth: parentInfo.momBirth || undefined,
+        } : undefined,
+      });
+      setResults(suggestions);
+      setSearched(true);
+      trackEvent("search_suggest", { gender });
+      setCompareList([]);
+      setShowCompare(false);
+      setLoading(false);
+      setTimeout(() => {
+        resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
+    }, 0);
   }
 
   // Filtered & sorted results
@@ -305,16 +309,21 @@ export default function SuggestTab() {
           )}
         </div>
 
-        <button onClick={handleSearch} disabled={!lastName.trim() || !birthDate} className="btn-primary mt-4 md:mt-5 w-full py-3 md:py-3.5 text-sm uppercase tracking-wider">
-          Tìm tên hợp mệnh
+        <button onClick={handleSearch} disabled={loading || !lastName.trim() || !birthDate} className="btn-primary mt-4 md:mt-5 w-full py-3 md:py-3.5 text-sm uppercase tracking-wider">
+          {loading ? (
+            <span className="inline-flex items-center gap-2">
+              <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              Đang tìm...
+            </span>
+          ) : "Tìm tên hợp mệnh"}
         </button>
       </div>
 
       {/* Results */}
       {searched && (
-        <div ref={resultsRef}>
+        <div ref={resultsRef} className="animate-expand">
           {/* Filter & Sort bar */}
-          <div ref={compareBarRef} className="result-card p-3 md:p-4 mb-4">
+          <div ref={compareBarRef} className="result-card p-3 md:p-4 mb-4 sticky top-0 z-30 bg-white/95 backdrop-blur-sm">
             <div className="grid grid-cols-1 sm:grid-cols-3 md:flex md:flex-wrap items-center gap-2 md:gap-3">
               <div className="flex items-center gap-2">
                 <label className="text-xs font-semibold text-[#555] whitespace-nowrap w-24 sm:w-auto">Điểm tối thiểu:</label>

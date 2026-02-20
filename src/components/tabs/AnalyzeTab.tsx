@@ -15,6 +15,7 @@ export default function AnalyzeTab() {
   const [fullName, setFullName] = useState("");
   const [birthDate, setBirthDate] = useState("");
   const [result, setResult] = useState<NumerologyResult | null>(null);
+  const [loading, setLoading] = useState(false);
   const [withParents, setWithParents] = useState(false);
   const [parentInfo, setParentInfo] = useState<ParentInfo>({ dadName: "", dadBirth: "", momName: "", momBirth: "" });
 
@@ -34,13 +35,17 @@ export default function AnalyzeTab() {
   }, []);
 
   function handleAnalyze() {
-    if (!fullName.trim() || !birthDate) return;
-    const parts = birthDate.split("-");
-    const formatted = `${parts[2]}/${parts[1]}/${parts[0]}`;
-    const res = analyzeFullName(fullName.trim(), formatted);
-    setResult(res);
-    setQueryParams({ tab: "name", mode: "analyze", name: fullName.trim(), birthDate });
-    trackEvent("search_analyze");
+    if (!fullName.trim() || !birthDate || loading) return;
+    setLoading(true);
+    setTimeout(() => {
+      const parts = birthDate.split("-");
+      const formatted = `${parts[2]}/${parts[1]}/${parts[0]}`;
+      const res = analyzeFullName(fullName.trim(), formatted);
+      setResult(res);
+      setQueryParams({ tab: "name", mode: "analyze", name: fullName.trim(), birthDate });
+      trackEvent("search_analyze");
+      setLoading(false);
+    }, 0);
   }
 
   return (
@@ -77,13 +82,18 @@ export default function AnalyzeTab() {
           {withParents && <ParentInputFields info={parentInfo} onChange={setParentInfo} />}
         </div>
 
-        <button onClick={handleAnalyze} disabled={!fullName.trim() || !birthDate} className="btn-primary mt-4 md:mt-5 w-full py-3 md:py-3.5 text-sm uppercase tracking-wider">
-          Phân tích
+        <button onClick={handleAnalyze} disabled={loading || !fullName.trim() || !birthDate} className="btn-primary mt-4 md:mt-5 w-full py-3 md:py-3.5 text-sm uppercase tracking-wider">
+          {loading ? (
+            <span className="inline-flex items-center gap-2">
+              <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              Đang phân tích...
+            </span>
+          ) : "Phân tích"}
         </button>
       </div>
 
       {result && (
-        <div className="result-card p-4 md:p-6">
+        <div className="result-card p-4 md:p-6 animate-expand">
           <div className="flex items-center gap-3 mb-4">
             <span className="number-badge w-12 h-12 md:w-14 md:h-14 text-xl md:text-2xl">{result.expression}</span>
             <div>

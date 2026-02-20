@@ -1,11 +1,19 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 import { getQueryParams, setQueryParams } from "@/lib/url-params";
 import { type Tab } from "@/constants/ui";
 import NameTab from "@/components/tabs/NameTab";
-import NicknameTab from "@/components/tabs/NicknameTab";
-import FavoritesTab from "@/components/tabs/FavoritesTab";
+
+const LazySpinner = () => (
+  <div className="flex justify-center py-12">
+    <span className="w-6 h-6 border-2 border-[#af3689]/30 border-t-[#af3689] rounded-full animate-spin" />
+  </div>
+);
+
+const NicknameTab = dynamic(() => import("@/components/tabs/NicknameTab"), { loading: LazySpinner });
+const FavoritesTab = dynamic(() => import("@/components/tabs/FavoritesTab"), { loading: LazySpinner });
 
 export default function Home() {
   const [tab, setTab] = useState<Tab>("name");

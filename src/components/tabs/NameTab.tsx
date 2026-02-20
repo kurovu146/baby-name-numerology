@@ -1,9 +1,17 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 import { getQueryParams, setQueryParams } from "@/lib/url-params";
 import SuggestTab from "./SuggestTab";
-import AnalyzeTab from "./AnalyzeTab";
+
+const AnalyzeTab = dynamic(() => import("./AnalyzeTab"), {
+  loading: () => (
+    <div className="flex justify-center py-12">
+      <span className="w-6 h-6 border-2 border-[#af3689]/30 border-t-[#af3689] rounded-full animate-spin" />
+    </div>
+  ),
+});
 
 export default function NameTab() {
   const [mode, setMode] = useState<"suggest" | "analyze">("suggest");

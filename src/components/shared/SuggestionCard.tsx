@@ -102,7 +102,7 @@ export default function SuggestionCard({
       </div>
 
       {expanded && (
-        <div className="px-3 md:px-4 pb-4 border-t border-[#f0e8f5]">
+        <div className="animate-expand px-3 md:px-4 pb-4 border-t border-[#f0e8f5]">
           <AnalysisDetail result={analysis} showNguHanh />
           {/* Blended score breakdown */}
           {blendedScore && (

@@ -21,26 +21,36 @@ export default function NicknameTab() {
   const [suggestGender, setSuggestGender] = useState<"male" | "female" | "all">("male");
   const [suggestions, setSuggestions] = useState<NicknameSuggestion[]>([]);
   const [suggestSearched, setSuggestSearched] = useState(false);
+  const [suggestLoading, setSuggestLoading] = useState(false);
+  const [analyzeLoading, setAnalyzeLoading] = useState(false);
   const [nickname, setNickname] = useState("");
   const [analyzeFullNameVal, setAnalyzeFullNameVal] = useState("");
   const [analyzeBirthDate, setAnalyzeBirthDate] = useState("");
   const [result, setResult] = useState<NicknameResult | null>(null);
 
   function handleSuggest() {
-    if (!suggestFullName.trim() || !suggestBirthDate) return;
-    const parts = suggestBirthDate.split("-");
-    const formatted = `${parts[2]}/${parts[1]}/${parts[0]}`;
-    const results = suggestNicknames({ fullName: suggestFullName.trim(), birthDate: formatted, gender: suggestGender, limit: 20 });
-    setSuggestions(results);
-    setSuggestSearched(true);
+    if (!suggestFullName.trim() || !suggestBirthDate || suggestLoading) return;
+    setSuggestLoading(true);
+    setTimeout(() => {
+      const parts = suggestBirthDate.split("-");
+      const formatted = `${parts[2]}/${parts[1]}/${parts[0]}`;
+      const results = suggestNicknames({ fullName: suggestFullName.trim(), birthDate: formatted, gender: suggestGender, limit: 20 });
+      setSuggestions(results);
+      setSuggestSearched(true);
+      setSuggestLoading(false);
+    }, 0);
   }
 
   function handleAnalyze() {
-    if (!nickname.trim()) return;
-    const hasComparison = analyzeFullNameVal.trim() && analyzeBirthDate;
-    const parts = analyzeBirthDate ? analyzeBirthDate.split("-") : [];
-    const formatted = parts.length === 3 ? `${parts[2]}/${parts[1]}/${parts[0]}` : "";
-    setResult(analyzeNicknameFunc(nickname.trim(), hasComparison ? analyzeFullNameVal.trim() : undefined, hasComparison ? formatted : undefined));
+    if (!nickname.trim() || analyzeLoading) return;
+    setAnalyzeLoading(true);
+    setTimeout(() => {
+      const hasComparison = analyzeFullNameVal.trim() && analyzeBirthDate;
+      const parts = analyzeBirthDate ? analyzeBirthDate.split("-") : [];
+      const formatted = parts.length === 3 ? `${parts[2]}/${parts[1]}/${parts[0]}` : "";
+      setResult(analyzeNicknameFunc(nickname.trim(), hasComparison ? analyzeFullNameVal.trim() : undefined, hasComparison ? formatted : undefined));
+      setAnalyzeLoading(false);
+    }, 0);
   }
 
   return (
@@ -82,13 +92,18 @@ export default function NicknameTab() {
                 </select>
               </div>
             </div>
-            <button onClick={handleSuggest} disabled={!suggestFullName.trim() || !suggestBirthDate} className="btn-primary mt-4 md:mt-5 w-full py-3 md:py-3.5 text-sm uppercase tracking-wider">
-              Gợi ý biệt danh
+            <button onClick={handleSuggest} disabled={suggestLoading || !suggestFullName.trim() || !suggestBirthDate} className="btn-primary mt-4 md:mt-5 w-full py-3 md:py-3.5 text-sm uppercase tracking-wider">
+              {suggestLoading ? (
+                <span className="inline-flex items-center gap-2">
+                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  Đang tìm...
+                </span>
+              ) : "Gợi ý biệt danh"}
             </button>
           </div>
 
           {suggestSearched && (
-            <div>
+            <div className="animate-expand">
               <h2 className="text-lg md:text-xl font-bold text-[#555] mb-4 flex items-center gap-2">
                 <span className="w-1 h-6 bg-[#da8138] rounded-full"></span>
                 Biệt danh gợi ý
@@ -164,13 +179,18 @@ export default function NicknameTab() {
                 <DatePicker value={analyzeBirthDate} onChange={setAnalyzeBirthDate} yearRange={{ min: 1900, max: 2035 }} className="md:max-w-xs" />
               </div>
             )}
-            <button onClick={handleAnalyze} disabled={!nickname.trim()} className="btn-primary mt-4 md:mt-5 w-full py-3 md:py-3.5 text-sm uppercase tracking-wider">
-              Phân tích biệt danh
+            <button onClick={handleAnalyze} disabled={analyzeLoading || !nickname.trim()} className="btn-primary mt-4 md:mt-5 w-full py-3 md:py-3.5 text-sm uppercase tracking-wider">
+              {analyzeLoading ? (
+                <span className="inline-flex items-center gap-2">
+                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  Đang phân tích...
+                </span>
+              ) : "Phân tích biệt danh"}
             </button>
           </div>
 
           {result && (
-            <div className="result-card p-4 md:p-6">
+            <div className="result-card p-4 md:p-6 animate-expand">
               <div className="flex items-center gap-3 mb-4">
                 <span className="number-badge w-12 h-12 md:w-14 md:h-14 text-xl md:text-2xl">{result.minorExpression}</span>
                 <div>
