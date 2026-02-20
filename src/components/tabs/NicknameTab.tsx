@@ -8,6 +8,7 @@ import {
 } from "@/lib/numerology";
 import { suggestNicknames, type NicknameSuggestion } from "@/lib/suggest";
 import DatePicker from "@/components/shared/DatePicker";
+import ShareButton from "@/components/shared/ShareButton";
 
 const CATEGORY_LABELS: Record<string, string> = {
   cute: "Dễ thương", animal: "Động vật", fruit: "Trái cây", nature: "Thiên nhiên", english: "Tiếng Anh", other: "Khác",
@@ -260,6 +261,15 @@ export default function NicknameTab() {
                   </div>
                 </div>
               )}
+
+              <ShareButton
+                name={analyzeFullNameVal}
+                birthDate={analyzeBirthDate}
+                mode="nickname"
+                nickname={result.nickname}
+                title={`Biệt danh "${result.nickname}" — Thần số học`}
+                text={`Phân tích biệt danh "${result.nickname}" theo thần số học: Minor Expression ${result.minorExpression}`}
+              />
             </div>
           )}
         </>
