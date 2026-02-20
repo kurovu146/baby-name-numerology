@@ -17,6 +17,7 @@ const FavoritesTab = dynamic(() => import("@/components/tabs/FavoritesTab"), { l
 
 export default function Home() {
   const [tab, setTab] = useState<Tab>("name");
+  const [totalSearches, setTotalSearches] = useState<number | null>(null);
 
   // Read initial tab from URL
   useEffect(() => {
@@ -28,6 +29,13 @@ export default function Home() {
     if (params.tab === "suggest" || params.tab === "analyze" || params.name) {
       setTab("name");
     }
+  }, []);
+
+  // Fetch stats
+  useEffect(() => {
+    fetch("/api/stats").then((r) => r.json()).then((d) => {
+      if (d.totalSearches > 0) setTotalSearches(d.totalSearches);
+    }).catch(() => {});
   }, []);
 
   return (
@@ -42,6 +50,11 @@ export default function Home() {
             Tìm tên hay, hợp mệnh cho bé yêu dựa trên phương pháp Pythagorean
             Numerology kết hợp Ngũ Hành
           </p>
+          {totalSearches !== null && (
+            <p className="text-white/50 text-xs mt-2">
+              {totalSearches.toLocaleString("vi-VN")} lượt tìm kiếm
+            </p>
+          )}
 
           {/* Tab Switcher */}
           <div className="grid grid-cols-3 gap-1.5 mt-5 max-w-xs mx-auto md:max-w-none md:flex md:flex-wrap md:justify-center md:gap-2">

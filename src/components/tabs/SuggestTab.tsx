@@ -121,6 +121,7 @@ export default function SuggestTab() {
       setResults(suggestions);
       setSearched(true);
       trackEvent("search_suggest", { gender });
+      fetch("/api/stats", { method: "POST" }).catch(() => {});
       setCompareList([]);
       setShowCompare(false);
       setLoading(false);

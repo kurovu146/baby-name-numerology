@@ -44,6 +44,7 @@ export default function AnalyzeTab() {
       setResult(res);
       setQueryParams({ tab: "name", mode: "analyze", name: fullName.trim(), birthDate });
       trackEvent("search_analyze");
+      fetch("/api/stats", { method: "POST" }).catch(() => {});
       setLoading(false);
     }, 0);
   }
