@@ -631,9 +631,9 @@ function SuggestTab() {
           {withParents && <ParentInputFields info={parentInfo} onChange={setParentInfo} />}
         </div>
 
-        {/* Life Path + Can Chi preview */}
-        {lifePath > 0 && (
-          <div className="mt-4 p-3 md:p-4 bg-gradient-to-r from-[#f3e7f9] to-[#fce4f0] rounded-lg border border-[#e0c5eb]">
+        {/* Life Path + Can Chi preview — luôn hiển thị để tránh layout jump */}
+        <div className="mt-4 p-3 md:p-4 bg-gradient-to-r from-[#f3e7f9] to-[#fce4f0] rounded-lg border border-[#e0c5eb] min-h-[60px]">
+          {lifePath > 0 ? (
             <div className="flex items-center gap-3 flex-wrap">
               <span className="number-badge w-11 h-11 md:w-12 md:h-12 text-lg md:text-xl shrink-0">{lifePath}</span>
               <div className="flex-1 min-w-0">
@@ -652,8 +652,10 @@ function SuggestTab() {
                 </div>
               )}
             </div>
-          </div>
-        )}
+          ) : (
+            <p className="text-xs text-[#bbb] italic">Nhập ngày sinh để xem Số Đường Đời và Mệnh</p>
+          )}
+        </div>
 
         <button onClick={handleSearch} disabled={!lastName.trim() || !birthDate} className="btn-primary mt-4 md:mt-5 w-full py-3 md:py-3.5 text-sm uppercase tracking-wider">
           Tìm tên hợp mệnh
