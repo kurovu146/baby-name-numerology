@@ -29,7 +29,6 @@ interface ComboFieldProps {
   min: number;
   max: number;
   flex: string;
-  inputWidth?: string; // width hint cho input
 }
 
 function ComboField({ value, placeholder, options, onSelect, min, max, flex }: ComboFieldProps) {
@@ -63,7 +62,7 @@ function ComboField({ value, placeholder, options, onSelect, min, max, flex }: C
     if (!isNaN(n) && n >= min && n <= max) {
       onSelect(n);
       setText(String(n));
-    } else if (raw === "") {
+    } else if (raw === "" || raw === "0") {
       onSelect(0);
       setText("");
     } else {
@@ -74,19 +73,10 @@ function ComboField({ value, placeholder, options, onSelect, min, max, flex }: C
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     const raw = e.target.value.replace(/\D/g, "");
-    // Giới hạn độ dài input
     const maxLen = max >= 1000 ? 4 : 2;
     const trimmed = raw.slice(0, maxLen);
     setText(trimmed);
-    // Auto-commit khi đủ chữ số
-    if (trimmed.length >= maxLen) {
-      const n = parseInt(trimmed);
-      if (n >= min && n <= max) {
-        onSelect(n);
-        setOpen(false);
-        inputRef.current?.blur();
-      }
-    }
+    // KHÔNG auto-commit khi gõ — chỉ commit khi blur hoặc Enter
   }
 
   function handleKeyDown(e: React.KeyboardEvent) {
@@ -106,19 +96,16 @@ function ComboField({ value, placeholder, options, onSelect, min, max, flex }: C
 
   function handleFocus() {
     focusedRef.current = true;
-    // Select all text để gõ đè nhanh
-    setTimeout(() => inputRef.current?.select(), 0);
     setOpen(true);
   }
 
   function handleBlur() {
     focusedRef.current = false;
-    // Delay nhẹ để click dropdown option kịp fire
     setTimeout(() => {
       if (wrapRef.current?.contains(document.activeElement)) return;
       commitValue(text);
       setOpen(false);
-    }, 150);
+    }, 200);
   }
 
   function handleOptionClick(v: number) {
@@ -150,7 +137,7 @@ function ComboField({ value, placeholder, options, onSelect, min, max, flex }: C
           tabIndex={-1}
           className="date-combo-chevron"
           onMouseDown={(e) => {
-            e.preventDefault(); // Prevent input blur
+            e.preventDefault();
             setOpen((o) => !o);
           }}
           aria-label="Mở danh sách"
