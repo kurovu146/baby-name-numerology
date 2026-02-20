@@ -50,7 +50,7 @@ export default function SuggestTab() {
   const [customNames, setCustomNames] = useState<string[]>([]);
 
   useEffect(() => {
-    setCustomNames(getCustomNames());
+    getCustomNames().then(setCustomNames);
   }, []);
 
   const allNames = useMemo(() => {
