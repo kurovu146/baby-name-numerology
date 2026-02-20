@@ -78,7 +78,7 @@ function setQueryParams(params: Record<string, string>): void {
 // Types
 // ============================================================================
 
-type Tab = "suggest" | "nickname" | "analyze" | "favorites";
+type Tab = "name" | "nickname" | "favorites";
 
 const LEVEL_COLORS: Record<string, string> = {
   excellent: "#54a404",
@@ -100,6 +100,82 @@ interface ParentInfo {
   dadBirth: string; // YYYY-MM-DD
   momName: string;
   momBirth: string; // YYYY-MM-DD
+}
+
+// ============================================================================
+// Component: Custom DatePicker (thay thế native input[type="date"])
+// ============================================================================
+
+interface DatePickerProps {
+  value: string; // "YYYY-MM-DD" hoặc ""
+  onChange: (value: string) => void;
+  yearRange?: { min: number; max: number };
+  className?: string;
+}
+
+function getDaysInMonth(month: number, year: number): number {
+  if (!month) return 31;
+  if (!year) return new Date(2024, month, 0).getDate(); // 2024 is leap year
+  return new Date(year, month, 0).getDate();
+}
+
+function DatePicker({ value, onChange, yearRange, className }: DatePickerProps) {
+  const parts = value ? value.split("-") : ["", "", ""];
+  const year = parseInt(parts[0]) || 0;
+  const month = parseInt(parts[1]) || 0;
+  const day = parseInt(parts[2]) || 0;
+
+  const minYear = yearRange?.min ?? 2020;
+  const maxYear = yearRange?.max ?? 2030;
+  const daysInMonth = getDaysInMonth(month, year);
+
+  const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+  const months = [
+    { v: 1, l: "Tháng 1" }, { v: 2, l: "Tháng 2" }, { v: 3, l: "Tháng 3" },
+    { v: 4, l: "Tháng 4" }, { v: 5, l: "Tháng 5" }, { v: 6, l: "Tháng 6" },
+    { v: 7, l: "Tháng 7" }, { v: 8, l: "Tháng 8" }, { v: 9, l: "Tháng 9" },
+    { v: 10, l: "Tháng 10" }, { v: 11, l: "Tháng 11" }, { v: 12, l: "Tháng 12" },
+  ];
+  const years = Array.from({ length: maxYear - minYear + 1 }, (_, i) => minYear + i);
+
+  function emit(d: number, m: number, y: number) {
+    if (!d || !m || !y) { onChange(""); return; }
+    const maxD = getDaysInMonth(m, y);
+    const clampedD = d > maxD ? maxD : d;
+    onChange(`${y}-${String(m).padStart(2, "0")}-${String(clampedD).padStart(2, "0")}`);
+  }
+
+  return (
+    <div className={`flex gap-1.5 ${className ?? ""}`}>
+      {/* Ngày */}
+      <select
+        value={day || ""}
+        onChange={(e) => emit(Number(e.target.value), month, year)}
+        className={`date-select flex-[0.8]${!day ? " placeholder" : ""}`}
+      >
+        <option value="" disabled>Ngày</option>
+        {days.map((d) => <option key={d} value={d}>{d}</option>)}
+      </select>
+      {/* Tháng */}
+      <select
+        value={month || ""}
+        onChange={(e) => emit(day, Number(e.target.value), year)}
+        className={`date-select flex-[1.3]${!month ? " placeholder" : ""}`}
+      >
+        <option value="" disabled>Tháng</option>
+        {months.map((m) => <option key={m.v} value={m.v}>{m.l}</option>)}
+      </select>
+      {/* Năm */}
+      <select
+        value={year || ""}
+        onChange={(e) => emit(day, month, Number(e.target.value))}
+        className={`date-select flex-[1.1]${!year ? " placeholder" : ""}`}
+      >
+        <option value="" disabled>Năm</option>
+        {years.map((y) => <option key={y} value={y}>{y}</option>)}
+      </select>
+    </div>
+  );
 }
 
 // ============================================================================
@@ -129,12 +205,7 @@ function ParentInputFields({
         </div>
         <div>
           <label className="block text-xs font-semibold text-[#555] mb-1">Ngày sinh Bố</label>
-          <input
-            type="date"
-            value={info.dadBirth}
-            onChange={(e) => onChange({ ...info, dadBirth: e.target.value })}
-            className="input-field w-full"
-          />
+          <DatePicker value={info.dadBirth} onChange={(v) => onChange({ ...info, dadBirth: v })} yearRange={{ min: 1950, max: 2010 }} />
         </div>
         <div>
           <label className="block text-xs font-semibold text-[#555] mb-1">Họ và tên Mẹ</label>
@@ -148,12 +219,7 @@ function ParentInputFields({
         </div>
         <div>
           <label className="block text-xs font-semibold text-[#555] mb-1">Ngày sinh Mẹ</label>
-          <input
-            type="date"
-            value={info.momBirth}
-            onChange={(e) => onChange({ ...info, momBirth: e.target.value })}
-            className="input-field w-full"
-          />
+          <DatePicker value={info.momBirth} onChange={(v) => onChange({ ...info, momBirth: v })} yearRange={{ min: 1950, max: 2010 }} />
         </div>
       </div>
     </div>
@@ -240,17 +306,17 @@ function ParentCompatCards({
 // ============================================================================
 
 export default function Home() {
-  const [tab, setTab] = useState<Tab>("suggest");
+  const [tab, setTab] = useState<Tab>("name");
 
   // Read initial tab from URL
   useEffect(() => {
     const params = getQueryParams();
-    if (params.tab && ["suggest", "nickname", "analyze", "favorites"].includes(params.tab)) {
+    if (params.tab && ["name", "nickname", "favorites"].includes(params.tab)) {
       setTab(params.tab as Tab);
     }
-    // Auto-switch to analyze tab if name param is present
-    if (params.name) {
-      setTab("analyze");
+    // Legacy: suggest/analyze → name tab
+    if (params.tab === "suggest" || params.tab === "analyze" || params.name) {
+      setTab("name");
     }
   }, []);
 
@@ -268,17 +334,16 @@ export default function Home() {
           </p>
 
           {/* Tab Switcher */}
-          <div className="grid grid-cols-4 gap-1 mt-5 max-w-xs mx-auto md:max-w-none md:flex md:flex-wrap md:justify-center md:gap-2">
+          <div className="grid grid-cols-3 gap-1.5 mt-5 max-w-xs mx-auto md:max-w-none md:flex md:flex-wrap md:justify-center md:gap-2">
             {[
-              { key: "suggest" as Tab, label: "Gợi ý tên" },
-              { key: "analyze" as Tab, label: "Phân tích" },
+              { key: "name" as Tab, label: "Tên" },
               { key: "nickname" as Tab, label: "Biệt danh" },
               { key: "favorites" as Tab, label: "Đã lưu" },
             ].map((t) => (
               <button
                 key={t.key}
                 onClick={() => { setTab(t.key); setQueryParams({ tab: t.key }); }}
-                className={`px-2 md:px-4 py-2 rounded-full text-xs md:text-sm font-bold transition-all text-center ${
+                className={`px-2 md:px-5 py-2 rounded-full text-xs md:text-sm font-bold transition-all text-center ${
                   tab === t.key
                     ? "bg-white text-[#af3689] shadow-lg"
                     : "bg-white/20 text-white hover:bg-white/30 border border-white/30"
@@ -292,8 +357,7 @@ export default function Home() {
       </header>
 
       <main className="max-w-4xl mx-auto px-3 md:px-4 py-6 md:py-8 flex-1">
-        {tab === "suggest" && <SuggestTab />}
-        {tab === "analyze" && <AnalyzeTab />}
+        {tab === "name" && <NameTab />}
         {tab === "nickname" && <NicknameTab />}
         {tab === "favorites" && <FavoritesTab />}
       </main>
@@ -484,11 +548,11 @@ function SuggestTab() {
 
         {/* Row 2 */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 mt-3 md:mt-4">
-          <div className="overflow-hidden">
+          <div>
             <label className="block text-sm font-semibold text-[#555] mb-1.5">
               Ngày sinh dự kiến <span className="text-red-500">*</span>
             </label>
-            <input type="date" value={birthDate} onChange={(e) => setBirthDate(e.target.value)} className="input-field w-full" />
+            <DatePicker value={birthDate} onChange={setBirthDate} yearRange={{ min: 2020, max: 2035 }} />
           </div>
           <div>
             <label className="block text-sm font-semibold text-[#555] mb-1.5">Giới tính</label>
@@ -855,7 +919,7 @@ function AnalyzeTab() {
     const formatted = `${parts[2]}/${parts[1]}/${parts[0]}`;
     const res = analyzeFullName(fullName.trim(), formatted);
     setResult(res);
-    setQueryParams({ tab: "analyze", name: fullName.trim(), birthDate });
+    setQueryParams({ tab: "name", mode: "analyze", name: fullName.trim(), birthDate });
   }
 
   return (
@@ -872,9 +936,9 @@ function AnalyzeTab() {
             <label className="block text-sm font-semibold text-[#555] mb-1.5">Họ và tên <span className="text-red-500">*</span></label>
             <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="Nguyễn Văn An" className="input-field w-full" />
           </div>
-          <div className="overflow-hidden">
+          <div>
             <label className="block text-sm font-semibold text-[#555] mb-1.5">Ngày sinh <span className="text-red-500">*</span></label>
-            <input type="date" value={birthDate} onChange={(e) => setBirthDate(e.target.value)} className="input-field w-full" />
+            <DatePicker value={birthDate} onChange={setBirthDate} yearRange={{ min: 1900, max: 2035 }} />
           </div>
         </div>
 
@@ -911,6 +975,49 @@ function AnalyzeTab() {
           <ShareButton name={result.originalName} birthDate={birthDate} />
         </div>
       )}
+    </div>
+  );
+}
+
+// ============================================================================
+// Tab: Tên (gom Gợi ý tên + Phân tích)
+// ============================================================================
+
+function NameTab() {
+  const [mode, setMode] = useState<"suggest" | "analyze">("suggest");
+
+  useEffect(() => {
+    const params = getQueryParams();
+    if (params.mode === "analyze" || params.name) {
+      setMode("analyze");
+    }
+  }, []);
+
+  return (
+    <div>
+      <div className="flex gap-2 mb-5 md:mb-6">
+        <button
+          onClick={() => { setMode("suggest"); setQueryParams({ tab: "name", mode: "suggest" }); }}
+          className={`flex-1 md:flex-none px-3 md:px-4 py-2 rounded-lg text-sm font-bold transition-all ${
+            mode === "suggest"
+              ? "bg-[#af3689] text-white shadow"
+              : "bg-white text-[#af3689] border border-[#e8dff0] hover:bg-[#faf5fc]"
+          }`}
+        >
+          Gợi ý tên
+        </button>
+        <button
+          onClick={() => { setMode("analyze"); setQueryParams({ tab: "name", mode: "analyze" }); }}
+          className={`flex-1 md:flex-none px-3 md:px-4 py-2 rounded-lg text-sm font-bold transition-all ${
+            mode === "analyze"
+              ? "bg-[#af3689] text-white shadow"
+              : "bg-white text-[#af3689] border border-[#e8dff0] hover:bg-[#faf5fc]"
+          }`}
+        >
+          Phân tích
+        </button>
+      </div>
+      {mode === "suggest" ? <SuggestTab /> : <AnalyzeTab />}
     </div>
   );
 }
@@ -978,9 +1085,9 @@ function NicknameTab() {
                 <label className="block text-sm font-semibold text-[#555] mb-1.5">Tên khai sinh <span className="text-red-500">*</span></label>
                 <input type="text" value={suggestFullName} onChange={(e) => setSuggestFullName(e.target.value)} placeholder="Nguyễn Văn An" className="input-field w-full" />
               </div>
-              <div className="overflow-hidden">
+              <div>
                 <label className="block text-sm font-semibold text-[#555] mb-1.5">Ngày sinh <span className="text-red-500">*</span></label>
-                <input type="date" value={suggestBirthDate} onChange={(e) => setSuggestBirthDate(e.target.value)} className="input-field w-full" />
+                <DatePicker value={suggestBirthDate} onChange={setSuggestBirthDate} yearRange={{ min: 1900, max: 2035 }} />
               </div>
               <div>
                 <label className="block text-sm font-semibold text-[#555] mb-1.5">Giới tính</label>
@@ -1070,7 +1177,7 @@ function NicknameTab() {
             {analyzeFullNameVal.trim() && (
               <div className="mt-3 md:mt-4">
                 <label className="block text-sm font-semibold text-[#555] mb-1.5">Ngày sinh</label>
-                <input type="date" value={analyzeBirthDate} onChange={(e) => setAnalyzeBirthDate(e.target.value)} className="input-field w-full md:w-1/2" />
+                <DatePicker value={analyzeBirthDate} onChange={setAnalyzeBirthDate} yearRange={{ min: 1900, max: 2035 }} className="md:max-w-xs" />
               </div>
             )}
             <button onClick={handleAnalyze} disabled={!nickname.trim()} className="btn-primary mt-4 md:mt-5 w-full py-3 md:py-3.5 text-sm uppercase tracking-wider">
@@ -1277,7 +1384,8 @@ function ShareButton({ name, birthDate }: { name: string; birthDate: string }) {
 
   function handleCopy() {
     const url = new URL(window.location.origin);
-    url.searchParams.set("tab", "analyze");
+    url.searchParams.set("tab", "name");
+    url.searchParams.set("mode", "analyze");
     url.searchParams.set("name", name);
     url.searchParams.set("birthDate", birthDate);
     navigator.clipboard.writeText(url.toString()).then(() => {
