@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useRef, useEffect } from "react";
+import { useState, useMemo, useRef, useEffect, useCallback } from "react";
 import {
   calcLifePath,
   calcCanChi,
@@ -26,8 +26,10 @@ export default function SuggestTab() {
   const [excludeInput, setExcludeInput] = useState("");
   const [excludeOpen, setExcludeOpen] = useState(false);
   const excludeRef = useRef<HTMLDivElement>(null);
+  const resultsRef = useRef<HTMLDivElement>(null);
   const [results, setResults] = useState<NameSuggestion[]>([]);
   const [searched, setSearched] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
 
   // Filter & Sort state
   const [minScore, setMinScore] = useState(0);
@@ -67,6 +69,19 @@ export default function SuggestTab() {
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
+  // Show/hide scroll-to-top button
+  useEffect(() => {
+    function handleScroll() {
+      setShowScrollTop(window.scrollY > 400);
+    }
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToTop = useCallback(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
   const lifePath = useMemo(() => {
     if (!birthDate) return 0;
     const parts = birthDate.split("-");
@@ -103,6 +118,10 @@ export default function SuggestTab() {
     setSearched(true);
     setCompareList([]);
     setShowCompare(false);
+    // Auto scroll xuống kết quả
+    setTimeout(() => {
+      resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 100);
   }
 
   // Filtered & sorted results
@@ -300,7 +319,7 @@ export default function SuggestTab() {
 
       {/* Results */}
       {searched && (
-        <div>
+        <div ref={resultsRef}>
           {/* Filter & Sort bar */}
           <div className="result-card p-3 md:p-4 mb-4">
             <div className="grid grid-cols-1 sm:grid-cols-3 md:flex md:flex-wrap items-center gap-2 md:gap-3">
@@ -368,6 +387,19 @@ export default function SuggestTab() {
             <CompareModal names={compareList} onClose={() => setShowCompare(false)} />
           )}
         </div>
+      )}
+
+      {/* Scroll to top button */}
+      {showScrollTop && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-6 right-6 w-10 h-10 bg-[#af3689] text-white rounded-full shadow-lg hover:bg-[#8a2b6d] transition-all flex items-center justify-center z-40"
+          title="Lên đầu trang"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M18 15l-6-6-6 6" />
+          </svg>
+        </button>
       )}
     </div>
   );
