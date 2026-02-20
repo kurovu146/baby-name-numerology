@@ -8,6 +8,7 @@ import type { NameSuggestion } from "@/lib/suggest";
 import AnalysisDetail from "./AnalysisDetail";
 import ParentCompatCards from "./ParentCompatCards";
 import ShareButton from "./ShareButton";
+import { trackEvent } from "@/lib/analytics";
 
 export default function SuggestionCard({
   suggestion,
@@ -57,6 +58,7 @@ export default function SuggestionCard({
         level: displayLevel,
         savedAt: Date.now(),
       });
+      trackEvent("save_favorite");
     }
     setFav(!fav);
   }

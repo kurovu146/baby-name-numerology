@@ -9,6 +9,7 @@ import ParentInputFields from "@/components/shared/ParentInputFields";
 import ParentCompatCards from "@/components/shared/ParentCompatCards";
 import AnalysisDetail from "@/components/shared/AnalysisDetail";
 import ShareButton from "@/components/shared/ShareButton";
+import { trackEvent } from "@/lib/analytics";
 
 export default function AnalyzeTab() {
   const [fullName, setFullName] = useState("");
@@ -39,6 +40,7 @@ export default function AnalyzeTab() {
     const res = analyzeFullName(fullName.trim(), formatted);
     setResult(res);
     setQueryParams({ tab: "name", mode: "analyze", name: fullName.trim(), birthDate });
+    trackEvent("search_analyze");
   }
 
   return (

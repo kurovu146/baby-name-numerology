@@ -13,6 +13,7 @@ import { LAST_NAMES, VIETNAMESE_NAMES, MIDDLE_NAMES } from "@/lib/names";
 import type { ParentInfo } from "@/constants/ui";
 import DatePicker from "@/components/shared/DatePicker";
 import ParentInputFields from "@/components/shared/ParentInputFields";
+import { trackEvent } from "@/lib/analytics";
 import SuggestionCard from "@/components/shared/SuggestionCard";
 import CompareModal from "@/components/shared/CompareModal";
 
@@ -107,6 +108,7 @@ export default function SuggestTab() {
     });
     setResults(suggestions);
     setSearched(true);
+    trackEvent("search_suggest", { gender });
     setCompareList([]);
     setShowCompare(false);
     // Auto scroll xuống kết quả
