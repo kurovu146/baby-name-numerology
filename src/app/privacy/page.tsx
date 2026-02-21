@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AdSense } from "@/components/adsense";
 
 export const metadata: Metadata = {
   title: "Chính Sách Bảo Mật | Thần Số Học Đặt Tên",
@@ -9,6 +10,7 @@ export const metadata: Metadata = {
 export default function PrivacyPage() {
   return (
     <>
+      <AdSense />
       <header className="hero-gradient text-white py-8 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-2xl md:text-3xl font-bold drop-shadow-md">

@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { getQueryParams, setQueryParams } from "@/lib/url-params";
 import { type Tab } from "@/constants/ui";
 import NameTab from "@/components/tabs/NameTab";
+import { AdSense } from "@/components/adsense";
 
 const LazySpinner = () => (
   <div className="flex justify-center py-12">
@@ -41,6 +42,7 @@ export default function Home() {
 
   return (
     <>
+      <AdSense />
       {/* Hero Header */}
       <header className="hero-gradient text-white py-8 px-4">
         <div className="max-w-4xl mx-auto text-center">

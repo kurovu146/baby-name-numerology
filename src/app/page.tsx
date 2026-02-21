@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AdSense } from "@/components/adsense";
 
 export const metadata: Metadata = {
   title: "Đặt Tên Bé Bính Ngọ 2026 — Mệnh Thiên Hà Thủy | Thần Số Học",
@@ -41,6 +42,7 @@ const TEN_NU_GOI_Y = [
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-[#f7f3fa]">
+      <AdSense />
       {/* Hero */}
       <header className="hero-gradient text-white text-center py-12 px-4">
         <p className="text-sm uppercase tracking-widest text-white/60 mb-2">Năm Bính Ngọ 2026</p>
